@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="RtlHardcoded">
+
+    <TextView
+        android:id="@+id/header_nav"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:drawablePadding="4dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/common_horizontal_margin"
+        android:paddingRight="@dimen/common_horizontal_margin"
+        android:textColor="@color/subTextBlack"
+        android:textSize="@dimen/largeTextSize" />
+
+    <TextView
+        android:id="@+id/header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxWidth="300dp"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:textColor="@color/textBlack"
+        android:textSize="18dp" />
+
+
+    <TextView
+        android:id="@+id/header_action"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/common_horizontal_margin"
+        android:paddingRight="@dimen/common_horizontal_margin"
+        android:textColor="@color/textBlue"
+        android:textSize="@dimen/largeTextSize"
+        tools:ignore="RelativeOverlap" />
+
+    <View
+        android:id="@+id/view_divide"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/backgroundColor" />
+
+    <View
+        android:id="@+id/view_focus"
+        android:layout_width="1px"
+        android:layout_height="1px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+</RelativeLayout>

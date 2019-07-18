@@ -1,0 +1,7 @@
+ext.versions = [
+        // Project
+        compileSdkVersion: 28,
+        minSdkVersion    : 16,
+        targetSdkVersion : 28,
+        jdkVersion       : '1.8'
+]

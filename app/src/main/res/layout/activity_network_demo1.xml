@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".network.demo1.NetworkDemo1Activity">
+
+    <com.chuangjiangx.core.headerbar.HeaderBar
+        android:id="@+id/header_bar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#FFFFFF"
+        app:header_divide_enable="true"
+        app:header_navIcon="@drawable/icon_back"
+        app:header_navText="返回"
+        app:header_title="网络请求"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        android:gravity="center"
+        android:text="network demo1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

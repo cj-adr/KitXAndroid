@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HeaderBar">
+        <attr name="header_navIcon" format="reference" />
+        <attr name="header_actionIcon" format="reference" />
+        <attr name="header_title" format="string|reference" />
+        <attr name="header_navText" format="string|reference" />
+        <attr name="header_actionText" format="string|reference" />
+        <attr name="header_navTextColor" format="color|reference" />
+        <attr name="header_titleTextColor" format="color|reference" />
+        <attr name="header_actionTextColor" format="color|reference" />
+        <attr name="header_divide_enable" format="boolean" />
+    </declare-styleable>
+
+</resources>
