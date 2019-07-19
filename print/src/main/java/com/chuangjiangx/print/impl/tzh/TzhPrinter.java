@@ -139,6 +139,24 @@ public class TzhPrinter implements Printable {
     }
 
     @Override
+    public void printBarCode(String barCode) {
+        if (null == mPrinterInstance) {
+            return;
+        }
+
+        // TODO
+    }
+
+    @Override
+    public void printQrCode(String qrCode) {
+        if (null == mPrinterInstance) {
+            return;
+        }
+
+        // TODO
+    }
+
+    @Override
     public void feedPaper(int line) {
         for (int i = 0; i < line; i++) {
             printText(" ", false, false, false);

@@ -42,6 +42,31 @@ public abstract class IPaperSize {
     }
 
     /**
+     * 获取居中文本
+     */
+    public String getCenterTxt(String txt, char c) {
+        int len = txt.getBytes(Charset.forName("GBK")).length;
+        int sub = MAX_BYTE_SIZE - len - PADDING_SIZE * 2;
+        int left = sub / 2;
+        int right = sub - left;
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < left; i++) {
+            sb.append(c);
+        }
+        sb.append(" ");
+        sb.append(" ");
+        sb.append(txt);
+        sb.append(" ");
+        sb.append(" ");
+        for (int i = 0; i < right; i++) {
+            sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
+    /**
      * 获取签名线
      */
     public String getMarkLine(String name) {

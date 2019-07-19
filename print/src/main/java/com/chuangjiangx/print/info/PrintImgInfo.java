@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * 打印图片信息
  */
-public class PrintImgInfo {
+public class PrintImgInfo implements IPrintInfo {
 
     public Bitmap img;
 

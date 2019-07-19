@@ -59,6 +59,22 @@ public class LacaraPrinter implements Printable {
     }
 
     @Override
+    public void printBarCode(String barCode) {
+        Intent intent = new Intent(mContext, LacaraPrinterService.class);
+        intent.putExtra(LacaraPrinterService.EXTRA_TYPE, 4);
+        intent.putExtra(LacaraPrinterService.EXTRA_TEXT, barCode);
+        mContext.startService(intent);
+    }
+
+    @Override
+    public void printQrCode(String qrCode) {
+        Intent intent = new Intent(mContext, LacaraPrinterService.class);
+        intent.putExtra(LacaraPrinterService.EXTRA_TYPE, 5);
+        intent.putExtra(LacaraPrinterService.EXTRA_TEXT, qrCode);
+        mContext.startService(intent);
+    }
+
+    @Override
     public void feedPaper(int line) {
         Intent intent = new Intent(mContext, LacaraPrinterService.class);
         intent.putExtra(LacaraPrinterService.EXTRA_TYPE, 7);
@@ -68,20 +84,6 @@ public class LacaraPrinter implements Printable {
     @Override
     public void cutPaper() {
 
-    }
-
-    public void printBarcode(String text) {
-        Intent intent = new Intent(mContext, LacaraPrinterService.class);
-        intent.putExtra(LacaraPrinterService.EXTRA_TYPE, 4);
-        intent.putExtra(LacaraPrinterService.EXTRA_TEXT, text);
-        mContext.startService(intent);
-    }
-
-    public void printQrcode(String text) {
-        Intent intent = new Intent(mContext, LacaraPrinterService.class);
-        intent.putExtra(LacaraPrinterService.EXTRA_TYPE, 5);
-        intent.putExtra(LacaraPrinterService.EXTRA_TEXT, text);
-        mContext.startService(intent);
     }
 
     public void flushPrint() {

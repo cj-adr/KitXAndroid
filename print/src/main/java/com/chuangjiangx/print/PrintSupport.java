@@ -4,8 +4,10 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.chuangjiangx.print.info.IPrintInfo;
+import com.chuangjiangx.print.info.PrintBarCodeInfo;
 import com.chuangjiangx.print.info.PrintImgInfo;
-import com.chuangjiangx.print.info.PrintInfo;
+import com.chuangjiangx.print.info.PrintQrCodeInfo;
 import com.chuangjiangx.print.info.PrintTxtInfo;
 import com.chuangjiangx.print.info.PrintWrapInfo;
 import com.chuangjiangx.print.size.IPaperSize;
@@ -61,14 +63,14 @@ public final class PrintSupport {
     /**
      * 检测打印机是否可用
      */
-    private boolean checkPrintable() {
+    public boolean checkPrintable() {
         return null != mPrintable && mPrintable.isAvailable() && mPrintable.hasPaper();
     }
 
     /**
      * 打印
      */
-    public void print(List<PrintInfo> list) {
+    public void print(List<IPrintInfo> list) {
         if (!checkPrintable()) {
             return;
         }
@@ -78,29 +80,41 @@ public final class PrintSupport {
         }
 
         // 打印
-        for (PrintInfo info : list) {
+        for (IPrintInfo info : list) {
             print(info);
         }
 
         mPrintable.cutPaper();
     }
 
-    private void print(PrintInfo info) {
-        if (info.data instanceof PrintTxtInfo) {
-            PrintTxtInfo txtInfo = (PrintTxtInfo) info.data;
+    private void print(IPrintInfo info) {
+        if (info instanceof PrintTxtInfo) {
+            PrintTxtInfo txtInfo = (PrintTxtInfo) info;
             mPrintable.printText(txtInfo.txt, txtInfo.isCenter, txtInfo.isLargeSize, txtInfo.isBold);
             return;
         }
 
-        if (info.data instanceof PrintImgInfo) {
-            PrintImgInfo imgInfo = (PrintImgInfo) info.data;
+        if (info instanceof PrintImgInfo) {
+            PrintImgInfo imgInfo = (PrintImgInfo) info;
             mPrintable.printBitmap(imgInfo.img);
             return;
         }
 
-        if (info.data instanceof PrintWrapInfo) {
-            PrintWrapInfo wrapInfo = (PrintWrapInfo) info.data;
+        if (info instanceof PrintWrapInfo) {
+            PrintWrapInfo wrapInfo = (PrintWrapInfo) info;
             mPrintable.feedPaper(wrapInfo.count);
+            return;
+        }
+
+        if (info instanceof PrintQrCodeInfo) {
+            PrintQrCodeInfo qrCodeInfo = (PrintQrCodeInfo) info;
+            mPrintable.printQrCode(qrCodeInfo.code);
+            return;
+        }
+
+        if (info instanceof PrintBarCodeInfo) {
+            PrintBarCodeInfo barCodeInfo = (PrintBarCodeInfo) info;
+            mPrintable.printBarCode(barCodeInfo.code);
         }
     }
 

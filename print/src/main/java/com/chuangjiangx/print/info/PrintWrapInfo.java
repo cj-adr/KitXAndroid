@@ -3,7 +3,7 @@ package com.chuangjiangx.print.info;
 /**
  * 打印空行信息
  */
-public class PrintWrapInfo {
+public class PrintWrapInfo implements IPrintInfo {
 
     /**
      * 空几行

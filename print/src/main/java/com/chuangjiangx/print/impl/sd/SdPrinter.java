@@ -89,6 +89,26 @@ public class SdPrinter implements Printable {
     }
 
     @Override
+    public void printBarCode(String barCode) {
+        try {
+            PrinterAPI.getInstance().printBarCode(0, 0, barCode);
+
+        } catch (Exception e) {
+            PrintLogUtils.e(e, "");
+        }
+    }
+
+    @Override
+    public void printQrCode(String qrCode) {
+        try {
+            PrinterAPI.getInstance().printQRCode2(qrCode);
+
+        } catch (Exception e) {
+            PrintLogUtils.e(e, "");
+        }
+    }
+
+    @Override
     public void feedPaper(int line) {
         for (int i = 0; i < line; i++) {
             printText(" ", false, false, false);

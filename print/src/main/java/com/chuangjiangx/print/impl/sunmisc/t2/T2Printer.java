@@ -51,6 +51,16 @@ public class T2Printer implements Printable {
     }
 
     @Override
+    public void printBarCode(String barCode) {
+
+    }
+
+    @Override
+    public void printQrCode(String qrCode) {
+
+    }
+
+    @Override
     public void feedPaper(int line) {
         AidlUtil.getInstance().feed(1);
     }

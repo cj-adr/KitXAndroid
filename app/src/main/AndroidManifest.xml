@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".print.PrintTestActivity" />
+        <activity android:name=".print.PrintActivity" />
     </application>
 
 </manifest>

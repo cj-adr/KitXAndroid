@@ -1,7 +1,7 @@
 package com.chuangjiangx.print;
 
+import com.chuangjiangx.print.info.IPrintInfo;
 import com.chuangjiangx.print.info.PrintImgInfo;
-import com.chuangjiangx.print.info.PrintInfo;
 import com.chuangjiangx.print.info.PrintTxtInfo;
 import com.chuangjiangx.print.info.PrintWrapInfo;
 import com.chuangjiangx.print.size.Print80Size;
@@ -28,26 +28,27 @@ public class ExampleUnitTest {
     public void testPrint() {
         PrintSupport.getInstance().init(null, new TestPrinter(), new Print80Size());
 
-        List<PrintInfo> list = new ArrayList<>();
+        List<IPrintInfo> list = new ArrayList<>();
 
-        list.add(PrintInfo.newData(PrintTxtInfo.newTitle(PrintSupport.getInstance().getPrintSize(), "创匠科技", '*')));
+        list.add(PrintTxtInfo.newTitle(PrintSupport.getInstance().getPrintSize(), "创匠科技", '*'));
 
-        list.add(PrintInfo.newData(new PrintWrapInfo(1)));
-        list.add(PrintInfo.newData(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-'))));
+        list.add(new PrintWrapInfo(1));
+        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
 
-        list.add(PrintInfo.newData(PrintTxtInfo.newNormalTxt("门店名称：创匠美发馆")));
-        list.add(PrintInfo.newData(PrintTxtInfo.newNormalTxt("收 营 员：张三")));
-        list.add(PrintInfo.newData(PrintTxtInfo.newNormalTxt("订 单 号：2019032312345677886555")));
-        list.add(PrintInfo.newData(PrintTxtInfo.newNormalTxt("支付方式：会员卡")));
-        list.add(PrintInfo.newData(PrintTxtInfo.newNormalTxt("支付状态：支付成功")));
-        list.add(PrintInfo.newData(PrintTxtInfo.newNormalTxt("支付时间：2019年1月2日 18:00:01")));
+        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getCenterTxt("创匠美发馆", ' ')));
+        list.add(PrintTxtInfo.newNormalTxt("门店名称：创匠美发馆"));
+        list.add(PrintTxtInfo.newNormalTxt("收 营 员：张三"));
+        list.add(PrintTxtInfo.newNormalTxt("订 单 号：2019032312345677886555"));
+        list.add(PrintTxtInfo.newNormalTxt("支付方式：会员卡"));
+        list.add(PrintTxtInfo.newNormalTxt("支付状态：支付成功"));
+        list.add(PrintTxtInfo.newNormalTxt("支付时间：2019年1月2日 18:00:01"));
 
-        list.add(PrintInfo.newData(new PrintWrapInfo(1)));
-        list.add(PrintInfo.newData(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-'))));
+        list.add(new PrintWrapInfo(1));
+        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
 
-        list.add(PrintInfo.newData(new PrintImgInfo(null)));
+        list.add(new PrintImgInfo(null));
 
-        list.add(PrintInfo.newData(new PrintWrapInfo(3)));
+        list.add(new PrintWrapInfo(3));
 
         PrintSupport.getInstance().print(list);
 

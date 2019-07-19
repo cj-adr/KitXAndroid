@@ -5,7 +5,7 @@ import com.chuangjiangx.print.size.IPaperSize;
 /**
  * 打印文本信息
  */
-public class PrintTxtInfo {
+public class PrintTxtInfo implements IPrintInfo{
 
     public String txt;
     public boolean isCenter;

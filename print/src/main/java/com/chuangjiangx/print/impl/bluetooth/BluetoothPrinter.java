@@ -10,7 +10,18 @@ import com.chuangjiangx.print.Printable;
  */
 public class BluetoothPrinter implements Printable {
 
-    public BluetoothPrinter() {
+    private String address;
+    private BluetoothConnectListener mListener;
+
+    public interface BluetoothConnectListener {
+        void onConnectSuccess(String address);
+
+        void onConnectFail(String address, Throwable e);
+    }
+
+    public BluetoothPrinter(String address, BluetoothConnectListener listener) {
+        this.address = address;
+        this.mListener = listener;
     }
 
     @Override
@@ -20,7 +31,7 @@ public class BluetoothPrinter implements Printable {
 
     @Override
     public void init(Context context) {
-        BluetoothPrinterUtils.getInstance().init(context);
+        BluetoothPrinterUtils.getInstance().init(context, address, mListener);
     }
 
     @Override
@@ -46,6 +57,16 @@ public class BluetoothPrinter implements Printable {
     @Override
     public void printBitmap(Bitmap bitmap) {
         BluetoothPrinterUtils.getInstance().printBitmap(bitmap);
+    }
+
+    @Override
+    public void printBarCode(String barCode) {
+        BluetoothPrinterUtils.getInstance().printBarCode(barCode);
+    }
+
+    @Override
+    public void printQrCode(String qrCode) {
+        BluetoothPrinterUtils.getInstance().printQrCode(qrCode);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.chuangjiangx.print.impl.sunmisc.d2;
+package com.chuangjiangx.print.impl.usb;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;

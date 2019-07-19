@@ -13,16 +13,16 @@ import java.lang.annotation.RetentionPolicy;
  */
 public interface Printable {
 
-    @IntDef({PrintType.TEST, PrintType.SM_D2, PrintType.SM_T2, PrintType.TZH, PrintType.SD, PrintType.LACARA, PrintType.BLUETOOTH})
+    @IntDef({PrintType.TEST, PrintType.SM_T2, PrintType.TZH, PrintType.SD, PrintType.LACARA, PrintType.BLUETOOTH, PrintType.USB})
     @Retention(RetentionPolicy.SOURCE)
     @interface PrintType {
         int TEST = -1;
-        int SM_D2 = 0;
         int SM_T2 = 1;
         int TZH = 2;
         int SD = 3;
         int LACARA = 4;
         int BLUETOOTH = 5;
+        int USB = 6;
     }
 
     /**
@@ -60,6 +60,16 @@ public interface Printable {
      * 打印图片
      */
     void printBitmap(Bitmap bitmap);
+
+    /**
+     * 打印条形码
+     */
+    void printBarCode(String barCode);
+
+    /**
+     * 打印二维码
+     */
+    void printQrCode(String qrCode);
 
     /**
      * 打印机走纸

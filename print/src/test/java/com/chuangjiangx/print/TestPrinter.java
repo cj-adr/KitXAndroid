@@ -43,6 +43,20 @@ public class TestPrinter implements Printable {
     }
 
     @Override
+    public void printBarCode(String barCode) {
+        System.out.println("***********");
+        System.out.println("**打印barCode**");
+        System.out.println("***********");
+    }
+
+    @Override
+    public void printQrCode(String qrCode) {
+        System.out.println("***********");
+        System.out.println("**打印qrCode**");
+        System.out.println("***********");
+    }
+
+    @Override
     public void feedPaper(int line) {
         for (int i = 0; i < line; i++) {
             System.out.println(" ");

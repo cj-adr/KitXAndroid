@@ -1,4 +1,4 @@
-package com.chuangjiangx.print.impl.sunmisc.d2;
+package com.chuangjiangx.print.impl.usb;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,13 +6,13 @@ import android.graphics.Bitmap;
 import com.chuangjiangx.print.Printable;
 
 /**
- * 商米D2系列，使用外置打印机
+ * 使用外置USB打印机
  */
-public class D2Printer implements Printable {
+public class UsbPrinter implements Printable {
 
     @Override
     public int getType() {
-        return PrintType.SM_D2;
+        return PrintType.USB;
     }
 
     @Override
@@ -53,6 +53,16 @@ public class D2Printer implements Printable {
         UsbPrinterUtils.getInstance().printBitmap(bitmap);
         UsbPrinterUtils.getInstance().setAlign(0);
         feedPaper(4);
+    }
+
+    @Override
+    public void printBarCode(String barCode) {
+
+    }
+
+    @Override
+    public void printQrCode(String qrCode) {
+
     }
 
     @Override
