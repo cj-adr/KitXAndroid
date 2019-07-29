@@ -33,6 +33,11 @@ public class SdPrinter implements Printable {
     }
 
     @Override
+    public void reconnect() {
+
+    }
+
+    @Override
     public void close() {
         PrinterAPI.getInstance().disconnect();
     }
@@ -43,8 +48,8 @@ public class SdPrinter implements Printable {
     }
 
     @Override
-    public boolean hasPaper() {
-        return true;
+    public boolean canReconnect() {
+        return false;
     }
 
     @Override

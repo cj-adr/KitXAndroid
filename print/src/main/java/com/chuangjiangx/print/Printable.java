@@ -37,6 +37,11 @@ public interface Printable {
     void init(Context context);
 
     /**
+     * 重连
+     */
+    void reconnect();
+
+    /**
      * 关闭打印机，在application中使用
      */
     void close();
@@ -47,9 +52,9 @@ public interface Printable {
     boolean isAvailable();
 
     /**
-     * 是否还有纸
+     * 是否可以重连
      */
-    boolean hasPaper();
+    boolean canReconnect();
 
     /**
      * 打印文本

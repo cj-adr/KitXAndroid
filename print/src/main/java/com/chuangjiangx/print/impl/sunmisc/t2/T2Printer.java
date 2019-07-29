@@ -21,18 +21,23 @@ public class T2Printer implements Printable {
     }
 
     @Override
+    public void reconnect() {
+
+    }
+
+    @Override
     public void close() {
         AidlUtil.getInstance().close();
     }
 
     @Override
     public boolean isAvailable() {
-        return AidlUtil.getInstance().isConnect();
+        return AidlUtil.getInstance().isConnect() && AidlUtil.getInstance().hasPaper();
     }
 
     @Override
-    public boolean hasPaper() {
-        return AidlUtil.getInstance().hasPaper();
+    public boolean canReconnect() {
+        return false;
     }
 
     @Override

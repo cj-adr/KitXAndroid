@@ -35,6 +35,11 @@ public class BluetoothPrinter implements Printable {
     }
 
     @Override
+    public void reconnect() {
+        BluetoothPrinterUtils.getInstance().connectDevice(address);
+    }
+
+    @Override
     public void close() {
         BluetoothPrinterUtils.getInstance().close();
     }
@@ -45,8 +50,8 @@ public class BluetoothPrinter implements Printable {
     }
 
     @Override
-    public boolean hasPaper() {
-        return BluetoothPrinterUtils.getInstance().isAvailable();
+    public boolean canReconnect() {
+        return true;
     }
 
     @Override

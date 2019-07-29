@@ -21,6 +21,11 @@ public class UsbPrinter implements Printable {
     }
 
     @Override
+    public void reconnect() {
+
+    }
+
+    @Override
     public void close() {
         UsbPrinterUtils.getInstance().close();
     }
@@ -31,8 +36,8 @@ public class UsbPrinter implements Printable {
     }
 
     @Override
-    public boolean hasPaper() {
-        return UsbPrinterUtils.getInstance().isAvailable();
+    public boolean canReconnect() {
+        return false;
     }
 
     @Override
