@@ -90,6 +90,11 @@ public class TzhPrinter implements Printable {
     }
 
     @Override
+    public void reconnect() {
+
+    }
+
+    @Override
     public void close() {
         if (mPrinterInstance != null && mIsConnect) {
             mPrinterInstance.closeConnection();
@@ -102,8 +107,8 @@ public class TzhPrinter implements Printable {
     }
 
     @Override
-    public boolean hasPaper() {
-        return true;
+    public boolean canReconnect() {
+        return false;
     }
 
     @Override

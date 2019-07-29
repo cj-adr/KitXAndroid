@@ -56,10 +56,10 @@ class BluetoothPrinterUtils {
         }
         isInit = true;
 
-        mContext = new WeakReference<>(context.getApplicationContext());
+        this.mContext = new WeakReference<>(context.getApplicationContext());
         this.mListener = listener;
 
-        connectDevice(address);
+        new Thread(() -> connectDevice(address)).start();
     }
 
     /**
@@ -87,32 +87,31 @@ class BluetoothPrinterUtils {
     /**
      * 连接蓝牙设备
      */
-    private void connectDevice(String address) {
-        new Thread(() -> {
-            try {
-                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+    void connectDevice(String address) {
+        try {
+            disconnect();
 
-                mBluetoothSocket = device.createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
-                mBluetoothSocket.connect();
-                mOutputStream = mBluetoothSocket.getOutputStream();
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
 
-                PrintLogUtils.d("蓝牙打印机连接成功！");
+            mBluetoothSocket = device.createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
+            mBluetoothSocket.connect();
+            mOutputStream = mBluetoothSocket.getOutputStream();
 
-                if (null != mListener) {
-                    mListener.onConnectSuccess(address);
-                }
+            PrintLogUtils.d("蓝牙打印机连接成功！");
 
-            } catch (Exception e) {
-                PrintLogUtils.e(e, "");
-                disconnect();
-
-                if (null != mListener) {
-                    mListener.onConnectFail(address, e);
-                }
+            if (null != mListener) {
+                mListener.onConnectSuccess(address);
             }
 
-        }).start();
+        } catch (Exception e) {
+            PrintLogUtils.e(e, "");
+            disconnect();
+
+            if (null != mListener) {
+                mListener.onConnectFail(address, e);
+            }
+        }
     }
 
     /**
@@ -148,7 +147,25 @@ class BluetoothPrinterUtils {
      * 是否可用
      */
     boolean isAvailable() {
-        return null != mBluetoothSocket && null != mOutputStream && mBluetoothSocket.isConnected();
+        if (null == mBluetoothSocket || null == mOutputStream || !mBluetoothSocket.isConnected()) {
+            return false;
+        }
+
+        return testWrite();
+    }
+
+    private boolean testWrite() {
+        boolean isAvailable = true;
+
+        try {
+            mOutputStream.write(new byte[]{0});
+            mOutputStream.flush();
+
+        } catch (Exception ignored) {
+            isAvailable = false;
+        }
+
+        return isAvailable;
     }
 
     /**
@@ -156,10 +173,6 @@ class BluetoothPrinterUtils {
      */
     void printText(String text, boolean isCenter, boolean isLarge, boolean isBold) {
         try {
-            if (!isAvailable()) {
-                return;
-            }
-
             byte[] textBytes = (text + "\r\n").getBytes("gbk");
             mOutputStream.write(COMMAND_CLEAR_FORMAT);
             if (isCenter) {
@@ -180,10 +193,6 @@ class BluetoothPrinterUtils {
      * 打印图片
      */
     void printBitmap(Bitmap bitmap) {
-        if (!isAvailable()) {
-            return;
-        }
-
         // TODO bitmap打印
     }
 
@@ -208,10 +217,6 @@ class BluetoothPrinterUtils {
      */
     void printBarCode(String text) {
         try {
-            if (!isAvailable()) {
-                return;
-            }
-
             byte[] b = new byte[13];
             int i = 0;
             while (2 * i < text.length()) {
@@ -239,10 +244,6 @@ class BluetoothPrinterUtils {
      */
     void printQrCode(String text) {
         try {
-            if (!isAvailable()) {
-                return;
-            }
-
             Integer pl = (text.length() + 3) % 256;
             Integer ph = (text.length() + 3) / 256;
             mOutputStream.write(COMMAND_CLEAR_FORMAT);

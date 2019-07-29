@@ -27,6 +27,11 @@ public class LacaraPrinter implements Printable {
     }
 
     @Override
+    public void reconnect() {
+
+    }
+
+    @Override
     public void close() {
         Intent intent = new Intent(mContext, LacaraPrinterService.class);
         intent.putExtra(LacaraPrinterService.EXTRA_TYPE, 2);
@@ -39,7 +44,7 @@ public class LacaraPrinter implements Printable {
     }
 
     @Override
-    public boolean hasPaper() {
+    public boolean canReconnect() {
         return false;
     }
 

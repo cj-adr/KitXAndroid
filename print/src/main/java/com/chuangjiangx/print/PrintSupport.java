@@ -64,19 +64,24 @@ public final class PrintSupport {
      * 检测打印机是否可用
      */
     public boolean checkPrintable() {
-        return null != mPrintable && mPrintable.isAvailable() && mPrintable.hasPaper();
+        return null != mPrintable && mPrintable.isAvailable();
     }
 
     /**
      * 打印
      */
     public void print(List<IPrintInfo> list) {
-        if (!checkPrintable()) {
+        if (null == list || list.isEmpty()) {
             return;
         }
 
-        if (null == list || list.isEmpty()) {
-            return;
+        if (!checkPrintable()) {
+            if (!mPrintable.canReconnect()) {
+                return;
+            }
+
+            // 重新连接
+            mPrintable.reconnect();
         }
 
         // 打印
