@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.chuangjiangx.core.network.callback.ErrorNetCallback;
 import com.chuangjiangx.core.network.callback.NetCallback;
+import com.chuangjiangx.core.network.error.ErrorConsumer;
 import com.chuangjiangx.core.network.error.HttpException;
 
 import java.net.ConnectException;
@@ -54,36 +55,7 @@ public class NetBuilder {
                             netCallback.onRequestSuccess();
                         }
                     }
-                }, throwable -> {
-                    if (!TextUtils.isEmpty(throwable.getMessage()))
-                        Log.e(NetBuilder.class.getSimpleName(), throwable.getMessage());
-                    if (throwable instanceof UnknownHostException || throwable instanceof ConnectException
-                            || throwable instanceof SocketTimeoutException) {
-                        HttpException httpException = new HttpException(HttpException.NET_ERROR_CODE
-                                , "网络请求失败，请检查网络后重试");
-                        for (ErrorNetCallback errorNetCallback : netCallbacks) {
-                            if (errorNetCallback != null) {
-                                errorNetCallback.onRequestFail(httpException);
-                            }
-                        }
-                    } else if (throwable instanceof HttpException) {
-                        //000006错误，表示未登录，跳转至登录页
-                        if ("000006".equals(((HttpException) throwable).getErrCode())) {
-                            mAuthExpiredListener.onAuthExpired();
-                        } else {
-                            for (ErrorNetCallback errorNetCallback : netCallbacks) {
-                                if (errorNetCallback != null) {
-                                    errorNetCallback.onRequestFail((HttpException) throwable);
-                                }
-                            }
-                        }
-                    } else {
-                        HttpException httpException = new HttpException("", throwable.getMessage());
-                        for (ErrorNetCallback errorNetCallback : netCallbacks) {
-                            errorNetCallback.onRequestFail(httpException);
-                        }
-                    }
-                });
+                }, new ErrorConsumer(mAuthExpiredListener, netCallbacks));
 
         if (mCompositeDisposable != null) {
             mCompositeDisposable.add(disposable);
