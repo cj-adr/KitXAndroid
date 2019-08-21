@@ -201,7 +201,7 @@ class BluetoothPrinterUtils {
      */
     void feedPaper(int count) {
         for (int i = 0; i < count; i++) {
-            printText("\n\n", false, false, false);
+            printText("\n", false, false, false);
         }
     }
 
@@ -209,7 +209,7 @@ class BluetoothPrinterUtils {
      * 切纸
      */
     void cutPaper() {
-        feedPaper(2);
+        feedPaper(1);
     }
 
     /**
