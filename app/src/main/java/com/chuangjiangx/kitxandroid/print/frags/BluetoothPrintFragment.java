@@ -1,5 +1,6 @@
 package com.chuangjiangx.kitxandroid.print.frags;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -23,7 +24,7 @@ import com.chuangjiangx.kitxandroid.R;
 import com.chuangjiangx.print.PrintLogUtils;
 import com.chuangjiangx.print.PrintSupport;
 import com.chuangjiangx.print.impl.bluetooth.BluetoothPrinter;
-import com.chuangjiangx.print.size.Print80Size;
+import com.chuangjiangx.print.size.Print58Size;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -40,6 +41,7 @@ public class BluetoothPrintFragment extends BasePrintFragment {
     private BluetoothListAdapter mAdapter;
     private List<BluetoothDevice> mData = new ArrayList<>();
     private boolean isConnect = false;
+    private TextView mTvAddress;
 
     @Override
     public void onAttach(Context context) {
@@ -64,6 +66,7 @@ public class BluetoothPrintFragment extends BasePrintFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mTvAddress = view.findViewById(R.id.tv_address);
         view.findViewById(R.id.btn_scan).setOnClickListener(v -> findBluetoothDevice());
         view.findViewById(R.id.btn_print).setOnClickListener(v -> {
             if (isConnect) {
@@ -167,7 +170,8 @@ public class BluetoothPrintFragment extends BasePrintFragment {
      * 连接设备
      */
     private void connectDevice(BluetoothDevice device) {
-        PrintSupport.getInstance().init(mContext, new BluetoothPrinter(device.getAddress(), getBluetoothConnectListener()), new Print80Size());
+        mTvAddress.setText(device.getAddress() + ": 连接中");
+        PrintSupport.getInstance().init(mContext, new BluetoothPrinter(device.getAddress(), getBluetoothConnectListener()), new Print58Size());
     }
 
     /**
@@ -178,12 +182,21 @@ public class BluetoothPrintFragment extends BasePrintFragment {
 
             @Override
             public void onConnectSuccess(String address) {
+                isConnect = true;
 
+                Activity activity = getActivity();
+                if (null != activity) {
+                    activity.runOnUiThread(() -> mTvAddress.setText(address + "连接成功！"));
+                }
             }
 
             @Override
             public void onConnectFail(String address, Throwable e) {
-
+                isConnect = false;
+                Activity activity = getActivity();
+                if (null != activity) {
+                    activity.runOnUiThread(() -> mTvAddress.setText(address + "连接失败！"));
+                }
             }
         };
     }

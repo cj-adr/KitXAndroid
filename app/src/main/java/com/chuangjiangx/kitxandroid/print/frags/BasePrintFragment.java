@@ -30,7 +30,6 @@ public abstract class BasePrintFragment extends BaseFragment {
 
         list.add(PrintTxtInfo.newTitle(PrintSupport.getInstance().getPrintSize(), "创匠科技", '*'));
 
-        list.add(new PrintWrapInfo(1));
         list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
 
         list.add(PrintTxtInfo.newNormalTxt("门店名称：创匠美发馆"));
@@ -40,14 +39,12 @@ public abstract class BasePrintFragment extends BaseFragment {
         list.add(PrintTxtInfo.newNormalTxt("支付状态：支付成功"));
         list.add(PrintTxtInfo.newNormalTxt("支付时间：2019年1月2日 18:00:01"));
 
-        list.add(new PrintWrapInfo(1));
         list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
 
         list.add(PrintTxtInfo.new2ColTxt(PrintSupport.getInstance().getPrintSize(), "项目", "数量"));
         list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
         list.add(PrintTxtInfo.new2ColTxt(PrintSupport.getInstance().getPrintSize(), "洗剪吹", "2次"));
 
-        list.add(new PrintWrapInfo(1));
         list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
 
         list.add(PrintTxtInfo.new3ColTxt(PrintSupport.getInstance().getPrintSize(), "项目", "数量", "价格"));
@@ -55,13 +52,12 @@ public abstract class BasePrintFragment extends BaseFragment {
         list.add(PrintTxtInfo.new3ColTxt(PrintSupport.getInstance().getPrintSize(), "洗剪吹", "2次", "189.00"));
         list.add(PrintTxtInfo.new3ColTxt(PrintSupport.getInstance().getPrintSize(), "背部护理", "1次", "289.00"));
 
-        list.add(new PrintWrapInfo(1));
         list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         list.add(new PrintImgInfo(bitmap));
 
-        list.add(new PrintWrapInfo(3));
+        list.add(new PrintWrapInfo(1));
 
         new Thread(() -> PrintSupport.getInstance().print(list)).start();
     }
