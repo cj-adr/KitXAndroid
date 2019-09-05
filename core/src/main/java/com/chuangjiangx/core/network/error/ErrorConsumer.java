@@ -32,7 +32,7 @@ public class ErrorConsumer implements Consumer<Throwable> {
         if (throwable instanceof UnknownHostException || throwable instanceof ConnectException
                 || throwable instanceof SocketTimeoutException) {
             HttpException httpException = new HttpException(HttpException.NET_ERROR_CODE
-                    , "网络请求失败，请检查网络后重试");
+                    , "网络异常 请检查你的网络");
             for (ErrorNetCallback errorNetCallback : mErrorNetCallbacks) {
                 if (errorNetCallback != null) {
                     errorNetCallback.onRequestFail(httpException);
