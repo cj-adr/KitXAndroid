@@ -24,6 +24,7 @@ public class BarUtils {
             MultiFormatWriter writer = new MultiFormatWriter();
             BitMatrix result = writer.encode(contents, format, desiredWidth,
                     desiredHeight, null);
+            result=deleteWhite(result);
             int width = result.getWidth();
             int height = result.getHeight();
             int[] pixels = new int[width * height];
@@ -72,5 +73,22 @@ public class BarUtils {
         } catch (WriterException e) {
             return null;
         }
+    }
+
+
+    private static BitMatrix deleteWhite(BitMatrix matrix) {
+        int[] rec = matrix.getEnclosingRectangle();
+        int resWidth = rec[2] + 1;
+        int resHeight = rec[3] + 1;
+
+        BitMatrix resMatrix = new BitMatrix(resWidth, resHeight);
+        resMatrix.clear();
+        for (int i = 0; i < resWidth; i++) {
+            for (int j = 0; j < resHeight; j++) {
+                if (matrix.get(i + rec[0], j + rec[1]))
+                    resMatrix.set(i, j);
+            }
+        }
+        return resMatrix;
     }
 }
