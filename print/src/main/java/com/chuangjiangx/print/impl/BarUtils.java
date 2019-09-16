@@ -4,9 +4,14 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -22,9 +27,14 @@ public class BarUtils {
             final int WHITE = 0xFFFFFFFF;
             final int BLACK = 0xFF000000;
             MultiFormatWriter writer = new MultiFormatWriter();
+            Map<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.MARGIN, 0);
             BitMatrix result = writer.encode(contents, format, desiredWidth,
-                    desiredHeight, null);
-            result=deleteWhite(result);
+                    desiredHeight, hints);
+            //result=deleteWhite(result);
+
             int width = result.getWidth();
             int height = result.getHeight();
             int[] pixels = new int[width * height];
@@ -73,22 +83,5 @@ public class BarUtils {
         } catch (WriterException e) {
             return null;
         }
-    }
-
-
-    private static BitMatrix deleteWhite(BitMatrix matrix) {
-        int[] rec = matrix.getEnclosingRectangle();
-        int resWidth = rec[2] + 1;
-        int resHeight = rec[3] + 1;
-
-        BitMatrix resMatrix = new BitMatrix(resWidth, resHeight);
-        resMatrix.clear();
-        for (int i = 0; i < resWidth; i++) {
-            for (int j = 0; j < resHeight; j++) {
-                if (matrix.get(i + rec[0], j + rec[1]))
-                    resMatrix.set(i, j);
-            }
-        }
-        return resMatrix;
     }
 }
