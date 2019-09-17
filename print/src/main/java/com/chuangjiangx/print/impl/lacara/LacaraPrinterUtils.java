@@ -159,7 +159,7 @@ final class LacaraPrinterUtils {
 
     void printBarCode(String barCode, int width, int height) {
         try {
-            mPrinter.printBarCode(-1, 100, 18, 73, barCode, mListener);
+            mPrinter.printBarCode(width, height, 18, 73, barCode, mListener);
 
         } catch (Exception e) {
             PrintLogUtils.e(e, "printBarCode 失败\b");

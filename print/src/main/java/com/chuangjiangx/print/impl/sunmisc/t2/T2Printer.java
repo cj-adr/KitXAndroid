@@ -42,8 +42,8 @@ public class T2Printer extends DefaultPrintable {
     }
 
     @Override
-    public void printQrCode(String qrCode, int width, int height) {
-        AidlUtil.getInstance().printQrCode(qrCode, width, height);
+    public void printQrCode(String qrCode, int moduleSize, int errorLevel) {
+        AidlUtil.getInstance().printQrCode(qrCode, moduleSize, errorLevel);
     }
 
     @Override

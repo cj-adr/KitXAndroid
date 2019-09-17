@@ -61,9 +61,9 @@ public class SdPrinter extends DefaultPrintable {
     }
 
     @Override
-    public void printQrCode(String qrCode, int width, int height) {
+    public void printQrCode(String qrCode, int modeSize, int errorLevel) {
         try {
-            PrinterAPI.getInstance().printQRCode2(qrCode);
+            PrinterAPI.getInstance().printQRCode(qrCode, modeSize, false);
 
         } catch (Exception e) {
             PrintLogUtils.e(e, "");

@@ -39,8 +39,8 @@ public class UsbPrinter extends DefaultPrintable {
     }
 
     @Override
-    public void printQrCode(String qrCode, int width, int height) {
-        UsbPrinterUtils.getInstance().printQrCode(qrCode, width, height);
+    public void printQrCode(String qrCode, int moduleSize, int errorLevel) {
+        UsbPrinterUtils.getInstance().printQrCode(qrCode, moduleSize, errorLevel);
     }
 
     @Override

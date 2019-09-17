@@ -202,14 +202,14 @@ class AidlUtil {
     /**
      * 打印二维码
      */
-    public void printQrCode(String qrCode, int width, int height) {
+    public void printQrCode(String qrCode, int moduleSize, int errorLevel) {
         if (!isConnect()) {
             return;
         }
 
         try {
             woyouService.setAlignment(1, null);
-            woyouService.printQRCode(qrCode, 5, 3, null);
+            woyouService.printQRCode(qrCode, moduleSize, errorLevel, null);
             woyouService.lineWrap(3, null);
         } catch (RemoteException e) {
             e.printStackTrace();

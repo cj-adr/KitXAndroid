@@ -14,15 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
- * @author: yangshuiqiang
- * Time:2017/12/5 14:01
- */
-
 public class BarUtils {
 
-    public static Bitmap encodeAsBitmap(String contents, BarcodeFormat format
-            , int desiredWidth, int desiredHeight) {
+    public static Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int desiredWidth, int desiredHeight) {
         try {
             final int WHITE = 0xFFFFFFFF;
             final int BLACK = 0xFF000000;
@@ -31,9 +25,7 @@ public class BarUtils {
             hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             hints.put(EncodeHintType.MARGIN, 0);
-            BitMatrix result = writer.encode(contents, format, desiredWidth,
-                    desiredHeight, hints);
-            //result=deleteWhite(result);
+            BitMatrix result = writer.encode(contents, format, desiredWidth, desiredHeight, hints);
 
             int width = result.getWidth();
             int height = result.getHeight();
@@ -49,9 +41,11 @@ public class BarUtils {
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
             return bitmap;
-        } catch (WriterException e) {
-            return null;
+
+        } catch (WriterException ignored) {
         }
+
+        return null;
     }
 
     public static Bitmap encodeAsBitmapOffset(String contents, BarcodeFormat format

@@ -8,7 +8,9 @@ import com.chuangjiangx.kitxandroid.R;
 import com.chuangjiangx.kitxandroid.network.base.BaseFragment;
 import com.chuangjiangx.print.PrintSupport;
 import com.chuangjiangx.print.info.IPrintInfo;
+import com.chuangjiangx.print.info.PrintBarCodeInfo;
 import com.chuangjiangx.print.info.PrintImgInfo;
+import com.chuangjiangx.print.info.PrintQrCodeInfo;
 import com.chuangjiangx.print.info.PrintTxtInfo;
 import com.chuangjiangx.print.info.PrintWrapInfo;
 
@@ -59,7 +61,19 @@ public abstract class BasePrintFragment extends BaseFragment {
 
         list.add(new PrintWrapInfo(1));
 
+        addCodeTest(list);
+
         new Thread(() -> PrintSupport.getInstance().print(list)).start();
+    }
+
+    public void addCodeTest(List<IPrintInfo> list) {
+        list.add(new PrintBarCodeInfo("barcode111111", 2, 180));
+
+        list.add(new PrintWrapInfo(1));
+
+        list.add(new PrintQrCodeInfo("qrcode111111", 10, 3));
+
+        list.add(new PrintWrapInfo(2));
     }
 
     @Override

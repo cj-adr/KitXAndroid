@@ -351,14 +351,18 @@ class UsbPrinterUtils {
      * 打印一维条形码
      */
     void printBarCode(String data, int width, int height) {
-        write(ESCUtil.getPrintBarCode(data, 5, height, width, 2));
+        setAlign(1);
+        write(ESCUtil.getPrintBarCode(data, 8, height, width, 0));
+        setAlign(0);
     }
 
     /**
      * 打印二维码
      */
-    public void printQrCode(String qrCode, int width, int height) {
-        write(ESCUtil.getPrintQRCode(qrCode, 10, 3));
+    public void printQrCode(String qrCode, int moduleSize, int errorLevel) {
+        setAlign(1);
+        write(ESCUtil.getPrintQRCode(qrCode, moduleSize, errorLevel));
+        setAlign(0);
     }
 
     /**
@@ -368,8 +372,6 @@ class UsbPrinterUtils {
         setAlign(1);
         write(BarUtils.getBitmapPrintData(bitmap));
         setAlign(0);
-
-        printLine(4);
     }
 
 }

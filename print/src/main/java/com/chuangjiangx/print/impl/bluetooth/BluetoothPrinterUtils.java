@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 
 import com.chuangjiangx.print.PrintLogUtils;
 import com.chuangjiangx.print.impl.BarUtils;
+import com.chuangjiangx.print.impl.sunmisc.t2.ESCUtil;
 import com.google.zxing.BarcodeFormat;
 
 import java.io.OutputStream;
@@ -181,7 +182,10 @@ class BluetoothPrinterUtils {
                 mOutputStream.write(COMMAND_CENTER);
             }
             if (isLarge) {
-                mOutputStream.write(COMMAND_DOUBLE_HEIGHT);
+                mOutputStream.write(ESCUtil.setTextSize(3));
+            }
+            if (isBold) {
+                mOutputStream.write(ESCUtil.boldOn());
             }
             mOutputStream.write(textBytes);
             mOutputStream.flush();
@@ -196,26 +200,10 @@ class BluetoothPrinterUtils {
      */
     void printBarCode(String text, int width, int height) {
         try {
-//            byte[] b = new byte[13];
-//            int i = 0;
-//            while (2 * i < text.length()) {
-//                String s = text.substring(2 * i, 2 * i + 2);
-//                b[i] = Byte.parseByte(s);
-//                i++;
-//            }
-//            //一维码打印
-//            mOutputStream.write(COMMAND_CLEAR_FORMAT);
-//            mOutputStream.write(COMMAND_HEIGHT);
-//            mOutputStream.write(COMMAND_WIDTH);
-//            mOutputStream.write(COMMAND_CENTER);
-//            mOutputStream.write(COMAND_TOP_FROMAT);
-//            mOutputStream.write(COMMAND_ONE_CODE);
-//            mOutputStream.write(b);
-//            mOutputStream.flush();
-
-            Bitmap bitmap = BarUtils.encodeAsBitmap(text, BarcodeFormat.CODE_128, 380, 64);
+            Bitmap bitmap = BarUtils.encodeAsBitmap(text, BarcodeFormat.CODE_128, width, height);
             if (null != bitmap) {
                 mOutputStream.write(COMMAND_CLEAR_FORMAT);
+                mOutputStream.write(COMMAND_CENTER);
                 mOutputStream.write(BarUtils.getBitmapPrintData(bitmap));
                 mOutputStream.flush();
             }
@@ -252,6 +240,7 @@ class BluetoothPrinterUtils {
     void printBitmap(Bitmap bitmap) {
         try {
             mOutputStream.write(COMMAND_CLEAR_FORMAT);
+            mOutputStream.write(COMMAND_CENTER);
             mOutputStream.write(BarUtils.getBitmapPrintData(bitmap));
             mOutputStream.flush();
 
@@ -265,6 +254,7 @@ class BluetoothPrinterUtils {
      */
     void feedPaper(int count) {
         for (int i = 0; i < count; i++) {
+
             printText("\n", false, false, false);
         }
     }
