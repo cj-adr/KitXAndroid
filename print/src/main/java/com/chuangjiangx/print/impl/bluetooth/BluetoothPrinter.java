@@ -3,12 +3,12 @@ package com.chuangjiangx.print.impl.bluetooth;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.chuangjiangx.print.Printable;
+import com.chuangjiangx.print.impl.DefaultPrintable;
 
 /**
  * 蓝牙打印
  */
-public class BluetoothPrinter implements Printable {
+public class BluetoothPrinter extends DefaultPrintable {
 
     private String address;
     private BluetoothConnectListener mListener;
@@ -22,11 +22,6 @@ public class BluetoothPrinter implements Printable {
     public BluetoothPrinter(String address, BluetoothConnectListener listener) {
         this.address = address;
         this.mListener = listener;
-    }
-
-    @Override
-    public int getType() {
-        return PrintType.BLUETOOTH;
     }
 
     @Override
@@ -60,18 +55,18 @@ public class BluetoothPrinter implements Printable {
     }
 
     @Override
+    public void printBarCode(String barCode, int width, int height) {
+        BluetoothPrinterUtils.getInstance().printBarCode(barCode, width, height);
+    }
+
+    @Override
+    public void printQrCode(String qrCode, int width, int height) {
+        BluetoothPrinterUtils.getInstance().printQrCode(qrCode, width, height);
+    }
+
+    @Override
     public void printBitmap(Bitmap bitmap) {
         BluetoothPrinterUtils.getInstance().printBitmap(bitmap);
-    }
-
-    @Override
-    public void printBarCode(String barCode) {
-        BluetoothPrinterUtils.getInstance().printBarCode(barCode);
-    }
-
-    @Override
-    public void printQrCode(String qrCode) {
-        BluetoothPrinterUtils.getInstance().printQrCode(qrCode);
     }
 
     @Override

@@ -15,7 +15,7 @@ public class PrintTestActivity extends IndexActivity {
 
     @Override
     public List<String> getItems() {
-        return Arrays.asList("USB打印", "商米T2", "蓝牙打印", "桑达打印", "天之河打印", "拉卡拉打印");
+        return Arrays.asList("USB打印", "商米T2", "蓝牙打印", "桑达打印", "拉卡拉打印");
     }
 
     @Override

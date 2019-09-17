@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 
 import com.chuangjiangx.print.PrintLogUtils;
-import com.chuangjiangx.print.Printable;
+import com.chuangjiangx.print.impl.DefaultPrintable;
 import com.szsicod.print.escpos.PrinterAPI;
 import com.szsicod.print.io.InterfaceAPI;
 import com.szsicod.print.io.SerialAPI;
@@ -15,12 +15,7 @@ import java.io.File;
 /**
  * 桑达打印
  */
-public class SdPrinter implements Printable {
-
-    @Override
-    public int getType() {
-        return PrintType.SD;
-    }
+public class SdPrinter extends DefaultPrintable {
 
     @Override
     public void init(Context context) {
@@ -30,11 +25,6 @@ public class SdPrinter implements Printable {
 
         InterfaceAPI io = new SerialAPI(new File("/dev/ttyS1"), 38400, 0);
         PrinterAPI.getInstance().connect(io);
-    }
-
-    @Override
-    public void reconnect() {
-
     }
 
     @Override
@@ -48,35 +38,32 @@ public class SdPrinter implements Printable {
     }
 
     @Override
-    public boolean canReconnect() {
-        return false;
+    public void printText(String text, boolean center, boolean largeSize, boolean bold) {
+        try {
+            PrinterAPI.getInstance().setAlignMode(center ? 1 : 0);
+            PrinterAPI.getInstance().setCharSize(largeSize ? 1 : 0, largeSize ? 1 : 0);
+            PrinterAPI.getInstance().setFontStyle(bold ? Typeface.BOLD : Typeface.NORMAL);
+            PrinterAPI.getInstance().printString(text, "GBK", true);
+
+        } catch (Exception e) {
+            PrintLogUtils.e(e, "");
+        }
     }
 
     @Override
-    public void printText(String text, boolean center, boolean largeSize, boolean bold) {
+    public void printBarCode(String barCode, int width, int height) {
         try {
-            if (center) {
-                PrinterAPI.getInstance().setAlignMode(1);
+            PrinterAPI.getInstance().printBarCode(0, 0, barCode);
 
-            } else {
-                PrinterAPI.getInstance().setAlignMode(0);
-            }
+        } catch (Exception e) {
+            PrintLogUtils.e(e, "");
+        }
+    }
 
-            if (largeSize) {
-                PrinterAPI.getInstance().setCharSize(1, 1);
-
-            } else {
-                PrinterAPI.getInstance().setCharSize(0, 0);
-            }
-
-            if (bold) {
-                PrinterAPI.getInstance().setFontStyle(Typeface.BOLD);
-
-            } else {
-                PrinterAPI.getInstance().setFontStyle(Typeface.NORMAL);
-            }
-
-            PrinterAPI.getInstance().printString(text, "GBK", true);
+    @Override
+    public void printQrCode(String qrCode, int width, int height) {
+        try {
+            PrinterAPI.getInstance().printQRCode2(qrCode);
 
         } catch (Exception e) {
             PrintLogUtils.e(e, "");
@@ -87,26 +74,6 @@ public class SdPrinter implements Printable {
     public void printBitmap(Bitmap bitmap) {
         try {
             PrinterAPI.getInstance().printRasterBitmap(bitmap);
-
-        } catch (Exception e) {
-            PrintLogUtils.e(e, "");
-        }
-    }
-
-    @Override
-    public void printBarCode(String barCode) {
-        try {
-            PrinterAPI.getInstance().printBarCode(0, 0, barCode);
-
-        } catch (Exception e) {
-            PrintLogUtils.e(e, "");
-        }
-    }
-
-    @Override
-    public void printQrCode(String qrCode) {
-        try {
-            PrinterAPI.getInstance().printQRCode2(qrCode);
 
         } catch (Exception e) {
             PrintLogUtils.e(e, "");

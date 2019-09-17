@@ -3,27 +3,18 @@ package com.chuangjiangx.print.impl.sunmisc.t2;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.chuangjiangx.print.Printable;
+import com.chuangjiangx.print.impl.DefaultPrintable;
 
 /**
  * 商米T2系列，使用内置打印
  */
-public class T2Printer implements Printable {
-
-    @Override
-    public int getType() {
-        return PrintType.SM_T2;
-    }
+public class T2Printer extends DefaultPrintable {
 
     @Override
     public void init(Context context) {
         AidlUtil.getInstance().init(context);
     }
 
-    @Override
-    public void reconnect() {
-
-    }
 
     @Override
     public void close() {
@@ -33,11 +24,6 @@ public class T2Printer implements Printable {
     @Override
     public boolean isAvailable() {
         return AidlUtil.getInstance().isConnect() && AidlUtil.getInstance().hasPaper();
-    }
-
-    @Override
-    public boolean canReconnect() {
-        return false;
     }
 
     @Override
@@ -51,23 +37,23 @@ public class T2Printer implements Printable {
     }
 
     @Override
+    public void printBarCode(String barCode, int width, int height) {
+        AidlUtil.getInstance().printBarCode(barCode, width, height);
+    }
+
+    @Override
+    public void printQrCode(String qrCode, int width, int height) {
+        AidlUtil.getInstance().printQrCode(qrCode, width, height);
+    }
+
+    @Override
     public void printBitmap(Bitmap bitmap) {
         AidlUtil.getInstance().printBitmap(bitmap);
     }
 
     @Override
-    public void printBarCode(String barCode) {
-
-    }
-
-    @Override
-    public void printQrCode(String qrCode) {
-
-    }
-
-    @Override
     public void feedPaper(int line) {
-        AidlUtil.getInstance().feed(1);
+        AidlUtil.getInstance().feed(line);
     }
 
     @Override

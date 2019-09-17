@@ -113,13 +113,13 @@ public final class PrintSupport {
 
         if (info instanceof PrintQrCodeInfo) {
             PrintQrCodeInfo qrCodeInfo = (PrintQrCodeInfo) info;
-            mPrintable.printQrCode(qrCodeInfo.code);
+            mPrintable.printQrCode(qrCodeInfo.code, qrCodeInfo.width, qrCodeInfo.height);
             return;
         }
 
         if (info instanceof PrintBarCodeInfo) {
             PrintBarCodeInfo barCodeInfo = (PrintBarCodeInfo) info;
-            mPrintable.printBarCode(barCodeInfo.code);
+            mPrintable.printBarCode(barCodeInfo.code, barCodeInfo.width, barCodeInfo.height);
         }
     }
 

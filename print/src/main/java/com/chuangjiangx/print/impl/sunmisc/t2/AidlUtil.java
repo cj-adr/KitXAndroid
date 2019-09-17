@@ -183,16 +183,16 @@ class AidlUtil {
     }
 
     /**
-     * 打印二维码
+     * 打印条形码
      */
-    void printQr(String data, int modulesize, int errorlevel) {
+    void printBarCode(String data, int width, int height) {
         if (!isConnect()) {
             return;
         }
 
         try {
             woyouService.setAlignment(1, null);
-            woyouService.printQRCode(data, modulesize, errorlevel, null);
+            woyouService.printBarCode(data, 8, height, width, 0, null);
             woyouService.lineWrap(3, null);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -200,15 +200,16 @@ class AidlUtil {
     }
 
     /**
-     * 打印条形码
+     * 打印二维码
      */
-    void printBarCode(String data, int symbology, int height, int width, int textposition) {
+    public void printQrCode(String qrCode, int width, int height) {
         if (!isConnect()) {
             return;
         }
 
         try {
-            woyouService.printBarCode(data, symbology, height, width, textposition, null);
+            woyouService.setAlignment(1, null);
+            woyouService.printQRCode(qrCode, 5, 3, null);
             woyouService.lineWrap(3, null);
         } catch (RemoteException e) {
             e.printStackTrace();
