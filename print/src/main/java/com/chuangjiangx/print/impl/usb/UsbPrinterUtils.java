@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import com.chuangjiangx.print.PrintLogUtils;
 import com.chuangjiangx.print.impl.BarUtils;
 import com.chuangjiangx.print.impl.sunmisc.t2.ESCUtil;
+import com.google.zxing.BarcodeFormat;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -352,7 +353,9 @@ class UsbPrinterUtils {
      */
     void printBarCode(String data, int width, int height) {
         setAlign(1);
-        write(ESCUtil.getPrintBarCode(data, 8, height, width, 0));
+        // write(ESCUtil.getPrintBarCode(data, 8, height, width, 0));
+        Bitmap bitmap = BarUtils.encodeAsBitmap(data, BarcodeFormat.CODE_128, width, height);
+        printBitmap(bitmap);
         setAlign(0);
     }
 

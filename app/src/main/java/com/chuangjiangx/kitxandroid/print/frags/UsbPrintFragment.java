@@ -12,7 +12,13 @@ import androidx.annotation.Nullable;
 import com.chuangjiangx.kitxandroid.R;
 import com.chuangjiangx.print.PrintSupport;
 import com.chuangjiangx.print.impl.usb.UsbPrinter;
+import com.chuangjiangx.print.info.IPrintInfo;
+import com.chuangjiangx.print.info.PrintBarCodeInfo;
+import com.chuangjiangx.print.info.PrintQrCodeInfo;
+import com.chuangjiangx.print.info.PrintWrapInfo;
 import com.chuangjiangx.print.size.Print58Size;
+
+import java.util.List;
 
 /**
  * USB打印
@@ -45,6 +51,17 @@ public class UsbPrintFragment extends BasePrintFragment {
             Toast.makeText(mContext, "请连接USB打印机！", Toast.LENGTH_SHORT).show();
 
         });
+    }
+
+    @Override
+    public void addCodeTest(List<IPrintInfo> list) {
+        list.add(new PrintBarCodeInfo("barcode111111", 360, 64));
+
+        list.add(new PrintWrapInfo(1));
+
+        list.add(new PrintQrCodeInfo("qrcode111111", 10, 3));
+
+        list.add(new PrintWrapInfo(2));
     }
 
 }
