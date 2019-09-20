@@ -30,38 +30,40 @@ public abstract class BasePrintFragment extends BaseFragment {
     void print() {
         List<IPrintInfo> list = new ArrayList<>();
 
-        list.add(PrintTxtInfo.newTitle(PrintSupport.getInstance().getPrintSize(), "创匠科技", '*'));
+        list.add(PrintTxtInfo.newTitle("创匠科技", '*'));
+        list.add(new PrintWrapInfo());
+        list.add(PrintTxtInfo.newSplitLine('-'));
 
-        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
+        list.addAll(PrintTxtInfo.newList("门店名称：创匠美发馆", "收 营 员：张三"));
 
-        list.add(PrintTxtInfo.newNormalTxt("门店名称：创匠美发馆"));
-        list.add(PrintTxtInfo.newNormalTxt("收 营 员：张三"));
-        list.add(PrintTxtInfo.newNormalTxt("订 单 号：2019032312345677886555"));
-        list.add(PrintTxtInfo.newNormalTxt("支付方式：会员卡"));
-        list.add(PrintTxtInfo.newNormalTxt("支付状态：支付成功"));
-        list.add(PrintTxtInfo.newNormalTxt("支付时间：2019年1月2日 18:00:01"));
+        list.add(new PrintTxtInfo("订 单 号：2019032312345677886555"));
+        list.add(new PrintTxtInfo("支付方式：会员卡"));
+        list.add(new PrintTxtInfo("支付状态：支付成功"));
+        list.add(new PrintTxtInfo("支付时间：2019年1月2日 18:00:01"));
+        list.add(PrintTxtInfo.newSplitLine('-'));
 
-        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
+        list.add(PrintTxtInfo.new2ColTxt("项目", "数量"));
+        list.add(PrintTxtInfo.newSplitLine('-'));
+        list.add(PrintTxtInfo.new2ColTxt("洗剪吹", "2次"));
+        list.add(PrintTxtInfo.newSplitLine('-'));
 
-        list.add(PrintTxtInfo.new2ColTxt(PrintSupport.getInstance().getPrintSize(), "项目", "数量"));
-        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
-        list.add(PrintTxtInfo.new2ColTxt(PrintSupport.getInstance().getPrintSize(), "洗剪吹", "2次"));
+        list.add(PrintTxtInfo.new3ColTxt("项目", "数量", "价格"));
+        list.add(PrintTxtInfo.newSplitLine('-'));
 
-        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
-
-        list.add(PrintTxtInfo.new3ColTxt(PrintSupport.getInstance().getPrintSize(), "项目", "数量", "价格"));
-        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
-        list.add(PrintTxtInfo.new3ColTxt(PrintSupport.getInstance().getPrintSize(), "洗剪吹", "2次", "189.00"));
-        list.add(PrintTxtInfo.new3ColTxt(PrintSupport.getInstance().getPrintSize(), "背部护理", "1次", "289.00"));
-
-        list.add(PrintTxtInfo.newNormalTxt(PrintSupport.getInstance().getPrintSize().getLine('-')));
+        list.add(PrintTxtInfo.new3ColTxt("洗剪吹", "2次", "189.00"));
+        list.add(PrintTxtInfo.new3ColTxt("背部护理", "1次", "289.00"));
+        list.add(PrintTxtInfo.newSplitLine('-'));
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         list.add(new PrintImgInfo(bitmap));
 
-        list.add(new PrintWrapInfo(1));
+        list.add(PrintTxtInfo.newMarkLine("签    名"));
+
+        list.add(new PrintWrapInfo());
 
         addCodeTest(list);
+
+        list.add(PrintTxtInfo.newCenterTxt("请保存好发票！"));
 
         new Thread(() -> PrintSupport.getInstance().print(list)).start();
     }
@@ -69,7 +71,7 @@ public abstract class BasePrintFragment extends BaseFragment {
     public void addCodeTest(List<IPrintInfo> list) {
         list.add(new PrintBarCodeInfo("barcode111111", 2, 180));
 
-        list.add(new PrintWrapInfo(1));
+        list.add(new PrintWrapInfo());
 
         list.add(new PrintQrCodeInfo("qrcode111111", 10, 3));
 

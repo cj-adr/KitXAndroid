@@ -5,12 +5,17 @@ package com.chuangjiangx.print.info;
  */
 public class PrintWrapInfo implements IPrintInfo {
 
-    /**
-     * 空几行
-     */
-    public int count;
+    // 空几行，默认空一行
+    public int count = 1;
+
+    public PrintWrapInfo() {
+    }
 
     public PrintWrapInfo(int count) {
+        if (count <= 0) {
+            return;
+        }
+
         this.count = count;
     }
 
