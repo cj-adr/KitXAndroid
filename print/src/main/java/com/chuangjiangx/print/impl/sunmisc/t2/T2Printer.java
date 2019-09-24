@@ -58,6 +58,7 @@ public class T2Printer extends DefaultPrintable {
 
     @Override
     public void cutPaper() {
+        feedPaper(2);
         AidlUtil.getInstance().cut();
     }
 

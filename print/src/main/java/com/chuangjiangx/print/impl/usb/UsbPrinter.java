@@ -30,7 +30,7 @@ public class UsbPrinter extends DefaultPrintable {
         UsbPrinterUtils.getInstance().setAlign(center ? 1 : 0);
         UsbPrinterUtils.getInstance().bold(bold);
         UsbPrinterUtils.getInstance().setTextSize(largeSize ? 3 : 0);
-        UsbPrinterUtils.getInstance().printTextNewLine(text);
+        UsbPrinterUtils.getInstance().printText(text);
     }
 
     @Override

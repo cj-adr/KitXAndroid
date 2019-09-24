@@ -263,7 +263,7 @@ class BluetoothPrinterUtils {
      * 切纸
      */
     void cutPaper() {
-        feedPaper(1);
+        feedPaper(2);
     }
 
 }

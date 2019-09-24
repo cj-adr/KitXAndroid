@@ -55,12 +55,10 @@ public class UsbPrintFragment extends BasePrintFragment {
 
     @Override
     public void addCodeTest(List<IPrintInfo> list) {
-        list.add(new PrintBarCodeInfo("barcode111111", 360, 64));
-
-        list.add(new PrintWrapInfo(1));
-
-        list.add(new PrintQrCodeInfo("qrcode111111", 10, 3));
-
+        list.add(new PrintWrapInfo(2));
+        list.add(new PrintBarCodeInfo("barcode111111", 380, 64));
+        list.add(new PrintWrapInfo(2));
+        list.add(new PrintQrCodeInfo("qrcode111111", 200, 200));
         list.add(new PrintWrapInfo(2));
     }
 

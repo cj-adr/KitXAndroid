@@ -28,7 +28,7 @@ import java.util.HashMap;
 class UsbPrinterUtils {
 
     private static final String ACTION_USB_PERMISSION = "com.usb.printer.USB_PERMISSION";
-    private static final int TIME_OUT = 1000;
+    private static final int TIME_OUT = 1000 * 15;
 
     private WeakReference<Context> mContext;
     private PendingIntent mPermissionIntent;
@@ -248,6 +248,7 @@ class UsbPrinterUtils {
                     printerEp = ep;
                     mUsbDevice = usbDevice;
                     mUsbDeviceConnection.claimInterface(usbInterface, true);
+
                     // 连接成功
                     PrintLogUtils.d("USB打印机连接成功");
                     break;
@@ -274,13 +275,17 @@ class UsbPrinterUtils {
     /**
      * 打印文字
      */
-    private void printText(String txt) {
+    void printText(String txt) {
         if (TextUtils.isEmpty(txt)) {
             return;
         }
 
         try {
             byte[] bytes = txt.getBytes("gbk");
+            byte[] bytes2 = "\n".getBytes("gbk");
+
+            write(bytes2);
+
             write(bytes);
 
         } catch (Exception e) {
@@ -289,19 +294,17 @@ class UsbPrinterUtils {
     }
 
     /**
-     * 换行打印文字
-     */
-    void printTextNewLine(String txt) {
-        printText(txt);
-        printLine(1);
-    }
-
-    /**
      * 打印空行
      */
     void printLine(int size) {
         for (int i = 0; i < size; i++) {
-            printText("\n");
+            try {
+                byte[] bytes = " \n".getBytes("gbk");
+                write(bytes);
+
+            } catch (Exception e) {
+                PrintLogUtils.e(e, "");
+            }
         }
     }
 
@@ -345,6 +348,7 @@ class UsbPrinterUtils {
      * 切纸
      */
     void cutPager() {
+        printLine(5);
         write(ESCUtil.cutter());
     }
 
@@ -352,28 +356,87 @@ class UsbPrinterUtils {
      * 打印一维条形码
      */
     void printBarCode(String data, int width, int height) {
-        setAlign(1);
-        // write(ESCUtil.getPrintBarCode(data, 8, height, width, 0));
         Bitmap bitmap = BarUtils.encodeAsBitmap(data, BarcodeFormat.CODE_128, width, height);
-        printBitmap(bitmap);
-        setAlign(0);
+
+        printBitmap2(bitmap);
     }
 
     /**
      * 打印二维码
      */
-    public void printQrCode(String qrCode, int moduleSize, int errorLevel) {
-        setAlign(1);
-        write(ESCUtil.getPrintQRCode(qrCode, moduleSize, errorLevel));
-        setAlign(0);
+    public void printQrCode(String qrCode, int width, int height) {
+        Bitmap bitmap = BarUtils.encodeAsBitmap(qrCode, BarcodeFormat.QR_CODE, width, height);
+
+        printBitmap2(bitmap);
     }
 
     /**
      * 打印图片
      */
     void printBitmap(Bitmap bitmap) {
+        if (null == bitmap) {
+            return;
+        }
+
+//        setAlign(1);
+//        write(BarUtils.getBitmapPrintData(bitmap));
+//        setAlign(0);
+
+        printBitmap2(bitmap);
+    }
+
+    private void printBitmap2(Bitmap bmp) {
+        if (null == bmp) {
+            return;
+        }
+
         setAlign(1);
-        write(BarUtils.getBitmapPrintData(bitmap));
+
+        byte[] data = new byte[]{0x1B, 0x33, 0x00};
+        write(data);
+        data[0] = (byte) 0x00;
+        data[1] = (byte) 0x00;
+        data[2] = (byte) 0x00;    //重置参数
+
+        int pixelColor;
+
+        // ESC * m nL nH 点阵图
+        byte[] escBmp = new byte[]{0x1B, 0x2A, 0x00, 0x00, 0x00};
+
+        escBmp[2] = (byte) 0x21;
+
+        //nL, nH
+        escBmp[3] = (byte) (bmp.getWidth() % 256);
+        escBmp[4] = (byte) (bmp.getWidth() / 256);
+
+        // 每行进行打印
+        for (int i = 0; i < bmp.getHeight() / 24 + 1; i++) {
+            write(escBmp);
+
+            for (int j = 0; j < bmp.getWidth(); j++) {
+                for (int k = 0; k < 24; k++) {
+                    if (((i * 24) + k) < bmp.getHeight()) {
+                        pixelColor = bmp.getPixel(j, (i * 24) + k);
+                        if (pixelColor != -1) {
+                            data[k / 8] += (byte) (128 >> (k % 8));
+                        }
+                    }
+                }
+
+                write(data);
+                // 重置参数
+                data[0] = (byte) 0x00;
+                data[1] = (byte) 0x00;
+                data[2] = (byte) 0x00;
+            }
+            //换行
+            byte[] byte_send1 = new byte[2];
+            byte_send1[0] = 0x0d;
+            byte_send1[1] = 0x0a;
+
+            write(byte_send1);
+        }
+
         setAlign(0);
     }
 
