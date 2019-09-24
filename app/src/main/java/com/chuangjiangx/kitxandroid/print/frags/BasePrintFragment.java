@@ -31,7 +31,6 @@ public abstract class BasePrintFragment extends BaseFragment {
         List<IPrintInfo> list = new ArrayList<>();
 
         list.add(PrintTxtInfo.newTitle("创匠科技", '*'));
-        list.add(new PrintWrapInfo());
         list.add(PrintTxtInfo.newSplitLine('-'));
 
         list.addAll(PrintTxtInfo.newList("门店名称：创匠美发馆", "收 营 员：张三"));
@@ -53,6 +52,10 @@ public abstract class BasePrintFragment extends BaseFragment {
         list.add(PrintTxtInfo.new3ColTxt("洗剪吹", "2次", "189.00"));
         list.add(PrintTxtInfo.new3ColTxt("背部护理", "1次", "289.00"));
         list.add(PrintTxtInfo.newSplitLine('-'));
+
+        list.add(new PrintTxtInfo("顾客扣款："));
+        list.add(PrintTxtInfo.newTitle("RMB：0.01", ' '));
+        list.add(new PrintWrapInfo());
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         list.add(new PrintImgInfo(bitmap));

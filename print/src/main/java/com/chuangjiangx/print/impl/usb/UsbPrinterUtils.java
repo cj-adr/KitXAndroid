@@ -350,6 +350,7 @@ class UsbPrinterUtils {
     void cutPager() {
         printLine(5);
         write(ESCUtil.cutter());
+        write(ESCUtil.init_printer());
     }
 
     /**

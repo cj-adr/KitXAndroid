@@ -27,19 +27,27 @@ public class UsbPrinter extends DefaultPrintable {
 
     @Override
     public void printText(String text, boolean center, boolean largeSize, boolean bold) {
-        UsbPrinterUtils.getInstance().setAlign(center ? 1 : 0);
+//        UsbPrinterUtils.getInstance().setAlign(center ? 1 : 0);
         UsbPrinterUtils.getInstance().bold(bold);
-        UsbPrinterUtils.getInstance().setTextSize(largeSize ? 3 : 0);
+        UsbPrinterUtils.getInstance().setTextSize(largeSize ? 1 : 0);
         UsbPrinterUtils.getInstance().printText(text);
     }
 
     @Override
     public void printBarCode(String barCode, int width, int height) {
+        UsbPrinterUtils.getInstance().setAlign(0);
+        UsbPrinterUtils.getInstance().bold(false);
+        UsbPrinterUtils.getInstance().setTextSize(0);
+
         UsbPrinterUtils.getInstance().printBarCode(barCode, width, height);
     }
 
     @Override
     public void printQrCode(String qrCode, int moduleSize, int errorLevel) {
+        UsbPrinterUtils.getInstance().setAlign(0);
+        UsbPrinterUtils.getInstance().bold(false);
+        UsbPrinterUtils.getInstance().setTextSize(0);
+
         UsbPrinterUtils.getInstance().printQrCode(qrCode, moduleSize, errorLevel);
     }
 
@@ -49,16 +57,28 @@ public class UsbPrinter extends DefaultPrintable {
             return;
         }
 
+        UsbPrinterUtils.getInstance().setAlign(0);
+        UsbPrinterUtils.getInstance().bold(false);
+        UsbPrinterUtils.getInstance().setTextSize(0);
+
         UsbPrinterUtils.getInstance().printBitmap(bitmap);
     }
 
     @Override
     public void feedPaper(int line) {
+        UsbPrinterUtils.getInstance().setAlign(0);
+        UsbPrinterUtils.getInstance().bold(false);
+        UsbPrinterUtils.getInstance().setTextSize(0);
+
         UsbPrinterUtils.getInstance().printLine(line);
     }
 
     @Override
     public void cutPaper() {
+        UsbPrinterUtils.getInstance().setAlign(0);
+        UsbPrinterUtils.getInstance().bold(false);
+        UsbPrinterUtils.getInstance().setTextSize(0);
+
         UsbPrinterUtils.getInstance().cutPager();
     }
 

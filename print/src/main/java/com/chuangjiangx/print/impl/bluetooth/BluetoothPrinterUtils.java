@@ -182,7 +182,7 @@ class BluetoothPrinterUtils {
                 mOutputStream.write(COMMAND_CENTER);
             }
             if (isLarge) {
-                mOutputStream.write(ESCUtil.setTextSize(3));
+                mOutputStream.write(ESCUtil.setTextSize(1));
             }
             if (isBold) {
                 mOutputStream.write(ESCUtil.boldOn());

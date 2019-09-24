@@ -10,7 +10,7 @@ public class Print58Size extends IPaperSize {
         this.MAX_LEFT_SIZE = 11;
         this.MAX_CENTER_SIZE = 6;
         this.MAX_RIGHT_SIZE = 11;
-        this.MAX_TITLE_BIG = 16;
+        this.MAX_TITLE_BIG = 0;
     }
 
 }
