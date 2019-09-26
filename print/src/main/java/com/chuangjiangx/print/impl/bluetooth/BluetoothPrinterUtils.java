@@ -4,12 +4,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import com.chuangjiangx.print.PrintLogUtils;
-import com.chuangjiangx.print.impl.BarUtils;
-import com.chuangjiangx.print.impl.sunmisc.t2.ESCUtil;
-import com.google.zxing.BarcodeFormat;
+import com.chuangjiangx.print.impl.BaseEscPrintUtils;
 
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
@@ -18,18 +15,10 @@ import java.util.UUID;
 /**
  * 蓝牙打印
  */
-class BluetoothPrinterUtils {
+final class BluetoothPrinterUtils extends BaseEscPrintUtils {
 
     // 蓝牙打印所需的UUID
     private static final UUID BLUETOOTH_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
-    private static final byte[] COMMAND_CLEAR_FORMAT = {0x1B, 0x40}; //复位打印机
-    private static final byte[] COMMAND_CENTER = {0x1B, 0x61, 0x01};//居中指令
-    private static final byte[] COMMAND_DOUBLE_HEIGHT = {0x1D, 0x21, 0x01}; //高加倍
-    private static final byte[] COMMAND_WIDTH = {0x1D, 0x77, 0x02};//设置条码宽
-    private static final byte[] COMMAND_HEIGHT = {0x1D, 0x68, 0x50};//设置条码高
-    private static final byte[] COMAND_TOP_FROMAT = {0x1D, 0x48, 0x00}; //设置条码样式
-    private static final byte[] COMMAND_ONE_CODE = {0x1D, 0x6B, 0x49, 0x0E, 0x7B, 0x43};//一维码指令
 
     private WeakReference<Context> mContext;
     // 蓝牙SOCKET对象
@@ -171,99 +160,14 @@ class BluetoothPrinterUtils {
         return isAvailable;
     }
 
-    /**
-     * 打印文字
-     */
-    void printText(String text, boolean isCenter, boolean isLarge, boolean isBold) {
+    @Override
+    protected void write(byte[] bytes) {
         try {
-            byte[] textBytes = (text + "\r\n").getBytes("gbk");
-            mOutputStream.write(COMMAND_CLEAR_FORMAT);
-            if (isCenter) {
-                mOutputStream.write(COMMAND_CENTER);
-            }
-            if (isLarge) {
-                mOutputStream.write(ESCUtil.setTextSize(1));
-            }
-            if (isBold) {
-                mOutputStream.write(ESCUtil.boldOn());
-            }
-            mOutputStream.write(textBytes);
+            mOutputStream.write(bytes);
             mOutputStream.flush();
 
-        } catch (Exception e) {
-            PrintLogUtils.e(e, "");
+        } catch (Exception ignored) {
         }
-    }
-
-    /**
-     * 打印条形码
-     */
-    void printBarCode(String text, int width, int height) {
-        try {
-            Bitmap bitmap = BarUtils.encodeAsBitmap(text, BarcodeFormat.CODE_128, width, height);
-            if (null != bitmap) {
-                mOutputStream.write(COMMAND_CLEAR_FORMAT);
-                mOutputStream.write(COMMAND_CENTER);
-                mOutputStream.write(BarUtils.getBitmapPrintData(bitmap));
-                mOutputStream.flush();
-            }
-
-        } catch (Exception e) {
-            PrintLogUtils.e(e, "");
-        }
-    }
-
-    /**
-     * 打印二维码
-     */
-    void printQrCode(String text, int width, int height) {
-        try {
-            int pl = (text.length() + 3) % 256;
-            int ph = (text.length() + 3) / 256;
-            mOutputStream.write(COMMAND_CLEAR_FORMAT);
-            mOutputStream.write(COMMAND_CENTER);
-            mOutputStream.write(new byte[]{0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x43, 0x08});
-            mOutputStream.write(new byte[]{0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x45, 0x30});
-            mOutputStream.write(new byte[]{0x1D, 0x28, 0x6B, (byte) pl, (byte) ph, 0x31, 0x50, 0x30});
-            mOutputStream.write(text.getBytes());
-            mOutputStream.write(new byte[]{0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x51, 0x30});
-            mOutputStream.flush();
-
-        } catch (Exception e) {
-            PrintLogUtils.e(e, "");
-        }
-    }
-
-    /**
-     * 打印图片
-     */
-    void printBitmap(Bitmap bitmap) {
-        try {
-            mOutputStream.write(COMMAND_CLEAR_FORMAT);
-            mOutputStream.write(COMMAND_CENTER);
-            mOutputStream.write(BarUtils.getBitmapPrintData(bitmap));
-            mOutputStream.flush();
-
-        } catch (Exception e) {
-            PrintLogUtils.e(e, "");
-        }
-    }
-
-    /**
-     * 打印机走纸，通过调用打印两行空白文字实现
-     */
-    void feedPaper(int count) {
-        for (int i = 0; i < count; i++) {
-
-            printText("\n", false, false, false);
-        }
-    }
-
-    /**
-     * 切纸
-     */
-    void cutPaper() {
-        feedPaper(2);
     }
 
 }

@@ -1,7 +1,10 @@
 package com.chuangjiangx.print;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+
+import com.chuangjiangx.print.info.IPrintInfo;
+
+import java.util.List;
 
 /**
  * 打印机接口，各类打印机需要适配该接口
@@ -10,6 +13,8 @@ public interface Printable {
 
     /**
      * 初始化打印机，在Application中使用
+     *
+     * @param context 上下文
      */
     void init(Context context);
 
@@ -34,32 +39,19 @@ public interface Printable {
     boolean canReconnect();
 
     /**
-     * 打印文本
+     * 初始化打印机，清除缓存
      */
-    void printText(String text, boolean center, boolean largeSize, boolean bold);
+    void initPrinter();
 
     /**
-     * 打印条形码
+     * 打印
+     *
+     * @param list 内容
      */
-    void printBarCode(String barCode, int width, int height);
+    void print(List<IPrintInfo> list);
 
     /**
-     * 打印二维码
-     */
-    void printQrCode(String qrCode, int width, int height);
-
-    /**
-     * 打印图片
-     */
-    void printBitmap(Bitmap bitmap);
-
-    /**
-     * 打印机走纸
-     */
-    void feedPaper(int line);
-
-    /**
-     * 切纸
+     * 走到切纸位置，有切刀就切纸，没有就提示声音
      */
     void cutPaper();
 

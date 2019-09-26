@@ -1,4 +1,4 @@
-package com.chuangjiangx.print.impl.sunmisc.t2;
+package com.chuangjiangx.print.escpos;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;

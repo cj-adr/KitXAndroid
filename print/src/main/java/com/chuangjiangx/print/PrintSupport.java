@@ -2,14 +2,8 @@ package com.chuangjiangx.print;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.chuangjiangx.print.info.IPrintInfo;
-import com.chuangjiangx.print.info.PrintBarCodeInfo;
-import com.chuangjiangx.print.info.PrintImgInfo;
-import com.chuangjiangx.print.info.PrintQrCodeInfo;
-import com.chuangjiangx.print.info.PrintTxtInfo;
-import com.chuangjiangx.print.info.PrintWrapInfo;
+import com.chuangjiangx.print.info.PrintPaper;
 import com.chuangjiangx.print.size.IPaperSize;
 
 import java.util.List;
@@ -35,15 +29,20 @@ public final class PrintSupport {
 
     /**
      * 初始化打印机
+     *
+     * @param context   上下文
+     * @param printable 使用的打印方式
+     * @param paperSize 打印机尺寸
      */
-    public void init(@NonNull Context context, @NonNull Printable printable, IPaperSize paperSize) {
+    public void init(Context context, Printable printable, IPaperSize paperSize) {
         this.mPrintable = printable;
-        this.mPrintable.init(context);
         this.mPaperSize = paperSize;
+
+        this.mPrintable.init(context);
     }
 
     /**
-     * 获取小票规格
+     * 获取尺寸规格
      */
     public IPaperSize getPrintSize() {
         return mPaperSize;
@@ -70,12 +69,24 @@ public final class PrintSupport {
     /**
      * 打印
      */
+    public void print(PrintPaper paper) {
+        this.print(paper.getPrintList());
+    }
+
+    /**
+     * 打印
+     */
     public void print(List<IPrintInfo> list) {
         if (null == list || list.isEmpty()) {
             return;
         }
 
+        if (null == mPrintable) {
+            return;
+        }
+
         if (!checkPrintable()) {
+            // 不可用
             if (!mPrintable.canReconnect()) {
                 return;
             }
@@ -84,43 +95,12 @@ public final class PrintSupport {
             mPrintable.reconnect();
         }
 
-        // 打印
-        for (IPrintInfo info : list) {
-            print(info);
-        }
-
+        // 清除缓存
+        mPrintable.initPrinter();
+        // 打印内容
+        mPrintable.print(list);
+        // 打印完成，切纸
         mPrintable.cutPaper();
-    }
-
-    private void print(IPrintInfo info) {
-        if (info instanceof PrintTxtInfo) {
-            PrintTxtInfo txtInfo = (PrintTxtInfo) info;
-            mPrintable.printText(txtInfo.txt, txtInfo.isCenter, txtInfo.isLargeSize, txtInfo.isBold);
-            return;
-        }
-
-        if (info instanceof PrintImgInfo) {
-            PrintImgInfo imgInfo = (PrintImgInfo) info;
-            mPrintable.printBitmap(imgInfo.img);
-            return;
-        }
-
-        if (info instanceof PrintWrapInfo) {
-            PrintWrapInfo wrapInfo = (PrintWrapInfo) info;
-            mPrintable.feedPaper(wrapInfo.count);
-            return;
-        }
-
-        if (info instanceof PrintQrCodeInfo) {
-            PrintQrCodeInfo qrCodeInfo = (PrintQrCodeInfo) info;
-            mPrintable.printQrCode(qrCodeInfo.code, qrCodeInfo.width, qrCodeInfo.height);
-            return;
-        }
-
-        if (info instanceof PrintBarCodeInfo) {
-            PrintBarCodeInfo barCodeInfo = (PrintBarCodeInfo) info;
-            mPrintable.printBarCode(barCodeInfo.code, barCodeInfo.width, barCodeInfo.height);
-        }
     }
 
 }

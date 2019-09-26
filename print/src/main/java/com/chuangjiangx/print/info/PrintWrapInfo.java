@@ -6,9 +6,10 @@ package com.chuangjiangx.print.info;
 public class PrintWrapInfo implements IPrintInfo {
 
     // 空几行，默认空一行
-    public int count = 1;
+    public int count;
 
     public PrintWrapInfo() {
+        this(1);
     }
 
     public PrintWrapInfo(int count) {

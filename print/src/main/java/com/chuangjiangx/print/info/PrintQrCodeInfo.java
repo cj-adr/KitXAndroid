@@ -6,17 +6,21 @@ package com.chuangjiangx.print.info;
 public class PrintQrCodeInfo implements IPrintInfo {
 
     public String code; // 文本
-    public int width = 10; // 宽度 或者是 二维码块大小(单位:点, 取值 1 至 16 )
-    public int height = 3; // 高度 或者是 二维码纠错等级(0 至 3)
+    public int width; // 二维码块大小(单位:点, 取值 1 至 16 )
 
     public PrintQrCodeInfo(String code) {
-        this.code = code;
+        this(code, 10);
     }
 
-    public PrintQrCodeInfo(String code, int width, int height) {
+    public PrintQrCodeInfo(String code, int width) {
         this.code = code;
-        this.width = width;
-        this.height = height;
+
+        if (width < 1 || width > 16) {
+            this.width = 10;
+
+        } else {
+            this.width = width;
+        }
     }
 
 }

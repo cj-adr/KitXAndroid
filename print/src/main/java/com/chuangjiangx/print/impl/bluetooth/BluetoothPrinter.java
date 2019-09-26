@@ -1,14 +1,18 @@
 package com.chuangjiangx.print.impl.bluetooth;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
-import com.chuangjiangx.print.impl.DefaultPrintable;
+import com.chuangjiangx.print.impl.AbstractPrintable;
+import com.chuangjiangx.print.info.PrintBarCodeInfo;
+import com.chuangjiangx.print.info.PrintImgInfo;
+import com.chuangjiangx.print.info.PrintQrCodeInfo;
+import com.chuangjiangx.print.info.PrintTxtInfo;
+import com.chuangjiangx.print.info.PrintWrapInfo;
 
 /**
  * 蓝牙打印
  */
-public class BluetoothPrinter extends DefaultPrintable {
+public class BluetoothPrinter extends AbstractPrintable {
 
     private String address;
     private BluetoothConnectListener mListener;
@@ -50,33 +54,38 @@ public class BluetoothPrinter extends DefaultPrintable {
     }
 
     @Override
-    public void printText(String text, boolean isCenter, boolean isLarge, boolean isBold) {
-        BluetoothPrinterUtils.getInstance().printText(text, isCenter, isLarge, isBold);
-    }
-
-    @Override
-    public void printBarCode(String barCode, int width, int height) {
-        BluetoothPrinterUtils.getInstance().printBarCode(barCode, width, height);
-    }
-
-    @Override
-    public void printQrCode(String qrCode, int width, int height) {
-        BluetoothPrinterUtils.getInstance().printQrCode(qrCode, width, height);
-    }
-
-    @Override
-    public void printBitmap(Bitmap bitmap) {
-        BluetoothPrinterUtils.getInstance().printBitmap(bitmap);
-    }
-
-    @Override
-    public void feedPaper(int line) {
-        BluetoothPrinterUtils.getInstance().feedPaper(line);
+    public void initPrinter() {
+        BluetoothPrinterUtils.getInstance().initPrinter();
     }
 
     @Override
     public void cutPaper() {
         BluetoothPrinterUtils.getInstance().cutPaper();
+    }
+
+    @Override
+    protected void printTxt(PrintTxtInfo info) {
+        BluetoothPrinterUtils.getInstance().printText(info.txt, info.isCenter, info.isBold, info.isLargeSize, info.hasUnderline);
+    }
+
+    @Override
+    protected void printImg(PrintImgInfo info) {
+        BluetoothPrinterUtils.getInstance().printBitmap(info.img, info.position);
+    }
+
+    @Override
+    protected void printWrap(PrintWrapInfo info) {
+        BluetoothPrinterUtils.getInstance().printWrapLine(info.count);
+    }
+
+    @Override
+    protected void printQrCode(PrintQrCodeInfo info) {
+        BluetoothPrinterUtils.getInstance().printQrCode(info.code, info.width);
+    }
+
+    @Override
+    protected void printBarCode(PrintBarCodeInfo info) {
+        BluetoothPrinterUtils.getInstance().printBarCode(info.code, info.width, info.height);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.chuangjiangx.kitxandroid.print.frags;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -24,10 +25,6 @@ import com.chuangjiangx.kitxandroid.R;
 import com.chuangjiangx.print.PrintLogUtils;
 import com.chuangjiangx.print.PrintSupport;
 import com.chuangjiangx.print.impl.bluetooth.BluetoothPrinter;
-import com.chuangjiangx.print.info.IPrintInfo;
-import com.chuangjiangx.print.info.PrintBarCodeInfo;
-import com.chuangjiangx.print.info.PrintQrCodeInfo;
-import com.chuangjiangx.print.info.PrintWrapInfo;
 import com.chuangjiangx.print.size.Print58Size;
 
 import java.util.ArrayList;
@@ -85,17 +82,10 @@ public class BluetoothPrintFragment extends BasePrintFragment {
         RecyclerView listView = view.findViewById(R.id.list_view);
         listView.setLayoutManager(new LinearLayoutManager(mContext));
         listView.setAdapter(mAdapter);
-    }
 
-    @Override
-    public void addCodeTest(List<IPrintInfo> list) {
-        list.add(new PrintBarCodeInfo("barcode111111", 360, 64));
-
-        list.add(new PrintWrapInfo(1));
-
-        list.add(new PrintQrCodeInfo("qrcode111111", 300, 300));
-
-        list.add(new PrintWrapInfo(1));
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION},
+                666);
     }
 
     private OnItemClickListener getOnItemClick() {

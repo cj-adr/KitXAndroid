@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
@@ -15,9 +14,7 @@ import android.hardware.usb.UsbManager;
 import android.text.TextUtils;
 
 import com.chuangjiangx.print.PrintLogUtils;
-import com.chuangjiangx.print.impl.BarUtils;
-import com.chuangjiangx.print.impl.sunmisc.t2.ESCUtil;
-import com.google.zxing.BarcodeFormat;
+import com.chuangjiangx.print.impl.BaseEscPrintUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -25,7 +22,7 @@ import java.util.HashMap;
 /**
  * 外接USB打印(支持商米D2和TZH外接USB打印设备)
  */
-class UsbPrinterUtils {
+final class UsbPrinterUtils extends BaseEscPrintUtils {
 
     private static final String ACTION_USB_PERMISSION = "com.usb.printer.USB_PERMISSION";
     private static final int TIME_OUT = 1000 * 15;
@@ -264,181 +261,18 @@ class UsbPrinterUtils {
         return null != usbInterface && null != mUsbDevice && null != mUsbDeviceConnection && null != printerEp;
     }
 
-    private void write(byte[] bytes) {
+    @Override
+    protected void write(byte[] bytes) {
         if (!isAvailable()) {
             return;
         }
 
-        mUsbDeviceConnection.bulkTransfer(printerEp, bytes, bytes.length, TIME_OUT);
-    }
-
-    /**
-     * 打印文字
-     */
-    void printText(String txt) {
-        if (TextUtils.isEmpty(txt)) {
-            return;
-        }
-
         try {
-            byte[] bytes = txt.getBytes("gbk");
-            byte[] bytes2 = "\n".getBytes("gbk");
-
-            write(bytes2);
-
-            write(bytes);
+            mUsbDeviceConnection.bulkTransfer(printerEp, bytes, bytes.length, TIME_OUT);
 
         } catch (Exception e) {
-            PrintLogUtils.e(e, "");
+            e.printStackTrace();
         }
-    }
-
-    /**
-     * 打印空行
-     */
-    void printLine(int size) {
-        for (int i = 0; i < size; i++) {
-            try {
-                byte[] bytes = " \n".getBytes("gbk");
-                write(bytes);
-
-            } catch (Exception e) {
-                PrintLogUtils.e(e, "");
-            }
-        }
-    }
-
-    /**
-     * 设置字体大小
-     *
-     * @param size 0:正常大小 1:两倍高 2:两倍宽 3:两倍大小 4:三倍高 5:三倍宽 6:三倍大 7:四倍高 8:四倍宽 9:四倍大小 10:五倍高 11:五倍宽 12:五倍大小
-     */
-    void setTextSize(int size) {
-        write(ESCUtil.setTextSize(size));
-    }
-
-    /**
-     * 字体加粗
-     */
-    void bold(boolean isBold) {
-        if (isBold) write(ESCUtil.boldOn());
-        else write(ESCUtil.boldOff());
-    }
-
-    /**
-     * 设置对齐方式
-     */
-    void setAlign(int position) {
-        byte[] bytes = null;
-        switch (position) {
-            case 0:
-                bytes = ESCUtil.alignLeft();
-                break;
-            case 1:
-                bytes = ESCUtil.alignCenter();
-                break;
-            case 2:
-                bytes = ESCUtil.alignRight();
-                break;
-        }
-        write(bytes);
-    }
-
-    /**
-     * 切纸
-     */
-    void cutPager() {
-        printLine(5);
-        write(ESCUtil.cutter());
-        write(ESCUtil.init_printer());
-    }
-
-    /**
-     * 打印一维条形码
-     */
-    void printBarCode(String data, int width, int height) {
-        Bitmap bitmap = BarUtils.encodeAsBitmap(data, BarcodeFormat.CODE_128, width, height);
-
-        printBitmap2(bitmap);
-    }
-
-    /**
-     * 打印二维码
-     */
-    public void printQrCode(String qrCode, int width, int height) {
-        Bitmap bitmap = BarUtils.encodeAsBitmap(qrCode, BarcodeFormat.QR_CODE, width, height);
-
-        printBitmap2(bitmap);
-    }
-
-    /**
-     * 打印图片
-     */
-    void printBitmap(Bitmap bitmap) {
-        if (null == bitmap) {
-            return;
-        }
-
-//        setAlign(1);
-//        write(BarUtils.getBitmapPrintData(bitmap));
-//        setAlign(0);
-
-        printBitmap2(bitmap);
-    }
-
-    private void printBitmap2(Bitmap bmp) {
-        if (null == bmp) {
-            return;
-        }
-
-        setAlign(1);
-
-        byte[] data = new byte[]{0x1B, 0x33, 0x00};
-        write(data);
-        data[0] = (byte) 0x00;
-        data[1] = (byte) 0x00;
-        data[2] = (byte) 0x00;    //重置参数
-
-        int pixelColor;
-
-        // ESC * m nL nH 点阵图
-        byte[] escBmp = new byte[]{0x1B, 0x2A, 0x00, 0x00, 0x00};
-
-        escBmp[2] = (byte) 0x21;
-
-        //nL, nH
-        escBmp[3] = (byte) (bmp.getWidth() % 256);
-        escBmp[4] = (byte) (bmp.getWidth() / 256);
-
-        // 每行进行打印
-        for (int i = 0; i < bmp.getHeight() / 24 + 1; i++) {
-            write(escBmp);
-
-            for (int j = 0; j < bmp.getWidth(); j++) {
-                for (int k = 0; k < 24; k++) {
-                    if (((i * 24) + k) < bmp.getHeight()) {
-                        pixelColor = bmp.getPixel(j, (i * 24) + k);
-                        if (pixelColor != -1) {
-                            data[k / 8] += (byte) (128 >> (k % 8));
-                        }
-                    }
-                }
-
-                write(data);
-                // 重置参数
-                data[0] = (byte) 0x00;
-                data[1] = (byte) 0x00;
-                data[2] = (byte) 0x00;
-            }
-            //换行
-            byte[] byte_send1 = new byte[2];
-            byte_send1[0] = 0x0d;
-            byte_send1[1] = 0x0a;
-
-            write(byte_send1);
-        }
-
-        setAlign(0);
     }
 
 }

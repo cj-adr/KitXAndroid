@@ -1,7 +1,6 @@
-package com.chuangjiangx.print.impl;
+package com.chuangjiangx.print.escpos;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -13,10 +12,22 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * 二维码/条形码转换工具
+ */
 public class BarUtils {
 
+    /**
+     * 将文本转成bitmap
+     */
     public static Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int desiredWidth, int desiredHeight) {
+        return encodeAsBitmapOffset(contents, format, desiredWidth, desiredHeight, 0);
+    }
+
+    /**
+     * 将文本转成bitmap
+     */
+    public static Bitmap encodeAsBitmapOffset(String contents, BarcodeFormat format, int desiredWidth, int desiredHeight, int offsetX) {
         try {
             final int WHITE = 0xFFFFFFFF;
             final int BLACK = 0xFF000000;
@@ -39,44 +50,13 @@ public class BarUtils {
             }
 
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+            bitmap.setPixels(pixels, 0, width, offsetX, 0, width, height);
             return bitmap;
 
         } catch (WriterException ignored) {
         }
 
         return null;
-    }
-
-    public static Bitmap encodeAsBitmapOffset(String contents, BarcodeFormat format
-            , int desiredWidth, int desiredHeight, int offsetX) {
-        try {
-            final int WHITE = 0xFFFFFFFF;
-            final int BLACK = 0xFF000000;
-            MultiFormatWriter writer = new MultiFormatWriter();
-            BitMatrix result = writer.encode(contents, format, desiredWidth,
-                    desiredHeight, null);
-
-
-            int width = result.getWidth();
-            int height = result.getHeight();
-            Bitmap bitmap = Bitmap.createBitmap(width + offsetX, height, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            canvas.drawColor(0xffffffff);
-            int[] pixels = new int[width * height];
-            // All are 0, or black, by default
-            for (int y = 0; y < height; y++) {
-                int offset = y * width;
-                for (int x = 0; x < width; x++) {
-                    pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-                }
-            }
-
-            bitmap.setPixels(pixels, 0, width, offsetX, 0, width, height);
-            return bitmap;
-        } catch (WriterException e) {
-            return null;
-        }
     }
 
     public static byte[] getBitmapPrintData(Bitmap bmp) {
@@ -136,6 +116,62 @@ public class BarUtils {
 
     private static int RGB2Gray(int r, int g, int b) {
         return (int) (0.29900 * r + 0.58700 * g + 0.11400 * b);
+    }
+
+    public interface Connection {
+        void write(byte[] data);
+    }
+
+    private void printBitmap(Bitmap bmp, Connection connection) {
+        if (null == bmp) {
+            return;
+        }
+
+        byte[] data = new byte[]{0x1B, 0x33, 0x00};
+        connection.write(data);
+        data[0] = (byte) 0x00;
+        data[1] = (byte) 0x00;
+        data[2] = (byte) 0x00;    //重置参数
+
+        int pixelColor;
+
+        // ESC * m nL nH 点阵图
+        byte[] escBmp = new byte[]{0x1B, 0x2A, 0x00, 0x00, 0x00};
+
+        escBmp[2] = (byte) 0x21;
+
+        //nL, nH
+        escBmp[3] = (byte) (bmp.getWidth() % 256);
+        escBmp[4] = (byte) (bmp.getWidth() / 256);
+
+        // 每行进行打印
+        for (int i = 0; i < bmp.getHeight() / 24 + 1; i++) {
+            connection.write(escBmp);
+
+            for (int j = 0; j < bmp.getWidth(); j++) {
+                for (int k = 0; k < 24; k++) {
+                    if (((i * 24) + k) < bmp.getHeight()) {
+                        pixelColor = bmp.getPixel(j, (i * 24) + k);
+                        if (pixelColor != -1) {
+                            data[k / 8] += (byte) (128 >> (k % 8));
+                        }
+                    }
+                }
+
+                connection.write(data);
+                // 重置参数
+                data[0] = (byte) 0x00;
+                data[1] = (byte) 0x00;
+                data[2] = (byte) 0x00;
+            }
+
+            //换行
+            byte[] byte_send1 = new byte[2];
+            byte_send1[0] = 0x0d;
+            byte_send1[1] = 0x0a;
+
+            connection.write(byte_send1);
+        }
     }
 
 }

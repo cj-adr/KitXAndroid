@@ -13,24 +13,33 @@ import java.util.List;
 public class PrintTxtInfo implements IPrintInfo {
 
     public String txt;
-    public boolean isCenter;
-    public boolean isBold; // 加粗
-    public boolean isLargeSize;
+    public boolean isCenter; // 是否居中
+    public boolean isBold; // 是否加粗
+    public boolean isLargeSize; // 是否是大字体
+    public boolean hasUnderline;// 是否有下划线
 
     public PrintTxtInfo(String txt) {
-        this.txt = txt;
+        this(txt, false, false, false, false);
     }
 
     public PrintTxtInfo(String txt, boolean isCenter) {
-        this.txt = txt;
-        this.isCenter = isCenter;
+        this(txt, isCenter, false, false, false);
+    }
+
+    public PrintTxtInfo(String txt, boolean isCenter, boolean isBold) {
+        this(txt, isCenter, isBold, false, false);
     }
 
     public PrintTxtInfo(String txt, boolean isCenter, boolean isBold, boolean isLargeSize) {
+        this(txt, isCenter, isBold, isLargeSize, false);
+    }
+
+    public PrintTxtInfo(String txt, boolean isCenter, boolean isBold, boolean isLargeSize, boolean hasUnderline) {
         this.txt = txt;
         this.isCenter = isCenter;
         this.isBold = isBold;
         this.isLargeSize = isLargeSize;
+        this.hasUnderline = hasUnderline;
     }
 
     /**

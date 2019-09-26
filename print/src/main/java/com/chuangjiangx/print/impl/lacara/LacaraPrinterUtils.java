@@ -10,7 +10,8 @@ import android.graphics.Bitmap;
 import android.os.IBinder;
 
 import com.chuangjiangx.print.PrintLogUtils;
-import com.chuangjiangx.print.impl.BarUtils;
+import com.chuangjiangx.print.escpos.BarUtils;
+import com.chuangjiangx.print.impl.BaseEscPrintUtils;
 import com.google.zxing.BarcodeFormat;
 import com.lkl.cloudpos.aidl.AidlDeviceService;
 import com.lkl.cloudpos.aidl.printer.AidlPrinter;
@@ -22,7 +23,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-final class LacaraPrinterUtils {
+final class LacaraPrinterUtils extends BaseEscPrintUtils {
 
     private final static String ACTION_LKL = "lkl_cloudpos_mid_service";
 
@@ -131,8 +132,7 @@ final class LacaraPrinterUtils {
 
     boolean isAvailable() {
         try {
-            return null != mPrinter &&
-                    mPrinter.getPrinterState() == PrinterConstant.PrinterState.PRINTER_STATE_NORMAL;
+            return null != mPrinter && mPrinter.getPrinterState() == PrinterConstant.PrinterState.PRINTER_STATE_NORMAL;
 
         } catch (Exception e) {
             PrintLogUtils.e(e, "isAvailable 失败\b");
@@ -145,7 +145,21 @@ final class LacaraPrinterUtils {
         unbindLkl();
     }
 
-    void printText(String text, boolean isCenter, boolean isLarge, boolean isBold) {
+    @Override
+    protected void write(byte[] bytes) {
+    }
+
+    @Override
+    public void initPrinter() {
+    }
+
+    @Override
+    public void cutPaper() {
+        printWrapLine(4);
+    }
+
+    @Override
+    public void printText(String text, boolean isCenter, boolean isLarge, boolean isBold, boolean hasUnderline) {
         try {
             // 拉卡拉打印条目
             List<PrintItemObj> printItemObjs = new ArrayList<>();
@@ -157,7 +171,15 @@ final class LacaraPrinterUtils {
         }
     }
 
-    void printBarCode(String barCode, int width, int height) {
+    @Override
+    public void printWrapLine(int line) {
+        for (int i = 0; i < line; i++) {
+            printText("\n\n", false, false, false, false);
+        }
+    }
+
+    @Override
+    public void printBarCode(String barCode, int width, int height) {
         try {
             mPrinter.printBarCode(width, height, 18, 73, barCode, mListener);
 
@@ -166,28 +188,20 @@ final class LacaraPrinterUtils {
         }
     }
 
-    void printQrCode(String qrCode, int width, int height) {
-        Bitmap bitmap = BarUtils.encodeAsBitmap(qrCode, BarcodeFormat.QR_CODE, width, height);
-        printBitmap(bitmap);
+    @Override
+    public void printQrCode(String qrCode, int width) {
+        Bitmap bitmap = BarUtils.encodeAsBitmap(qrCode, BarcodeFormat.QR_CODE, width, width);
+        printBitmap(bitmap, 1);
     }
 
-    void printBitmap(Bitmap bitmap) {
+    @Override
+    public void printBitmap(Bitmap bitmap, int position) {
         try {
             mPrinter.printBmp(46, bitmap.getWidth(), bitmap.getHeight(), bitmap, mListener);
 
         } catch (Exception e) {
             PrintLogUtils.e(e, "printBitmap 失败\b");
         }
-    }
-
-    void feedPaper(int line) {
-        for (int i = 0; i < line; i++) {
-            printText("\n\n", false, false, false);
-        }
-    }
-
-    void cutPaper() {
-        feedPaper(2);
     }
 
 }

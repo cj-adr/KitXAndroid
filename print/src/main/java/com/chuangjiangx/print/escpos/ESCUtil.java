@@ -1,4 +1,4 @@
-package com.chuangjiangx.print.impl.sunmisc.t2;
+package com.chuangjiangx.print.escpos;
 
 import android.graphics.Bitmap;
 
@@ -134,8 +134,10 @@ public class ESCUtil {
 
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try {
-            buffer.write(new byte[]{0x1D, 0x66, 0x01, 0x1D, 0x48, (byte) textposition,
-                    0x1D, 0x77, (byte) width, 0x1D, 0x68, (byte) height, 0x0A});
+            buffer.write(new byte[]{0x1D, 0x66, 0x01,
+                    0x1D, 0x48, (byte) textposition,
+                    0x1D, 0x77, (byte) width,
+                    0x1D, 0x68, (byte) height, 0x0A});
 
             byte[] barcode;
             if (symbology == 10) {

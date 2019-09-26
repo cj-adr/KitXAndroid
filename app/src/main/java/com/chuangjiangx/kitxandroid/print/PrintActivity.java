@@ -11,7 +11,7 @@ import com.chuangjiangx.kitxandroid.network.base.BaseActivity;
 import com.chuangjiangx.kitxandroid.print.frags.BluetoothPrintFragment;
 import com.chuangjiangx.kitxandroid.print.frags.LklPrintFragment;
 import com.chuangjiangx.kitxandroid.print.frags.SDPrintFragment;
-import com.chuangjiangx.kitxandroid.print.frags.T2PrintFragment;
+import com.chuangjiangx.kitxandroid.print.frags.SMPrintFragment;
 import com.chuangjiangx.kitxandroid.print.frags.UsbPrintFragment;
 
 /**
@@ -42,7 +42,7 @@ public class PrintActivity extends BaseActivity implements SourceInitialization 
     private Fragment getFragment() {
         switch (type) {
             case 1:
-                return new T2PrintFragment();
+                return new SMPrintFragment();
 
             case 2:
                 return new BluetoothPrintFragment();
