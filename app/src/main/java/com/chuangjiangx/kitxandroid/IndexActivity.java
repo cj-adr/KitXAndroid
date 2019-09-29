@@ -11,7 +11,6 @@ import java.util.List;
 
 public abstract class IndexActivity extends AppCompatActivity implements View.OnClickListener {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

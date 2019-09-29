@@ -4,8 +4,11 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import com.chuangjiangx.print.PrintLogUtils;
+import com.chuangjiangx.print.PrintSupport;
 import com.chuangjiangx.print.escpos.BarUtils;
 import com.chuangjiangx.print.escpos.ESCPOSUtil;
+import com.chuangjiangx.print.size.IPaperSize;
+import com.chuangjiangx.print.size.Print80Size;
 import com.google.zxing.BarcodeFormat;
 
 /**
@@ -72,30 +75,30 @@ public abstract class BaseEscPrintUtils {
      * 打印一维条形码
      */
     public void printBarCode(String data, int width, int height) {
-        Bitmap bitmap = BarUtils.encodeAsBitmap(data, BarcodeFormat.CODE_128, 300, 80);
-        printBitmap(bitmap, 1);
+        if (width <= 0 || height <= 0) {
+            width = 380;
+            height = 64;
 
-//        setAlign(1);
-//
-//        write(ESCPOSUtil.printBarCode(data, width, height));
-//
-//        printWrapLine(1);
-//        setAlign(0);
+            IPaperSize paperSize = PrintSupport.getInstance().getPrintSize();
+            if (paperSize instanceof Print80Size) {
+                width = 560;
+                height = 80;
+            }
+        }
+
+        Bitmap bitmap = BarUtils.encodeAsBitmap(data, BarcodeFormat.CODE_128, width, height);
+        printBitmap(bitmap, 1);
     }
 
     /**
      * 打印二维码
      */
-    public void printQrCode(String data, int moduleSize) {
-        Bitmap bitmap = BarUtils.encodeAsBitmap(data, BarcodeFormat.QR_CODE, 300, 300);
+    public void printQrCode(String data, int width) {
+        if (width <= 0) {
+            width = 300;
+        }
+        Bitmap bitmap = BarUtils.encodeAsBitmap(data, BarcodeFormat.QR_CODE, width, width);
         printBitmap(bitmap, 1);
-
-//        setAlign(1);
-//
-//        write(ESCPOSUtil.printQrCode(qrCode, moduleSize, 3));
-//
-//        printWrapLine(1);
-//        setAlign(0);
     }
 
     /**
