@@ -19,9 +19,9 @@ public abstract class BasePrintFragment extends BaseFragment {
     }
 
     void print() {
-        PrintPaper paper = new PrintPaper();
+        PrintPaper.Builder builder = new PrintPaper.Builder();
 
-        paper.addTitle("创匠科技", '*')
+        PrintPaper paper = builder.addTitle("创匠科技", '*')
                 .addSplitLine()
                 .addTxt("门店名称：创匠美发馆",
                         "收 营 员：张三",
@@ -55,11 +55,31 @@ public abstract class BasePrintFragment extends BaseFragment {
                 .addWrapLine()
                 .addQrCode("qrcode111111")
                 .addWrapLine()
+                .merge(new Merge())
+                .merge(new Merge2(), "哈哈哈")
 
                 .addCenterTxt("请保存好发票！")
-                .finish();
+                .build();
 
         new Thread(() -> PrintSupport.getInstance().print(paper)).start();
+    }
+
+    private class Merge implements PrintPaper.Function {
+
+        @Override
+        public void handle(PrintPaper.Builder it) {
+
+            it.addTxt("test");
+        }
+    }
+
+    private class Merge2 implements PrintPaper.Function2<String> {
+
+        @Override
+        public void handle(PrintPaper.Builder it, String s) {
+
+            it.addTxt("test: " + s);
+        }
     }
 
     @Override
