@@ -191,14 +191,6 @@ public final class PrintPaper {
         }
 
         /**
-         * 复杂操作
-         */
-        public <Func extends Function2<Param>, Param> Builder merge(Func func, Param param) {
-            func.handle(this, param);
-            return this;
-        }
-
-        /**
          * Paper 准备完毕
          */
         public PrintPaper build() {
@@ -212,11 +204,6 @@ public final class PrintPaper {
     public interface Function {
 
         void handle(Builder it);
-    }
-
-    public interface Function2<Param> {
-
-        void handle(Builder it, Param param);
     }
 
 }
