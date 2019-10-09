@@ -56,7 +56,14 @@ public abstract class AbstractPrintable implements Printable {
 
     private void dispatch(IPrintInfo info) {
         if (info instanceof PrintTxtInfo) {
-            printTxt((PrintTxtInfo) info);
+            PrintTxtInfo txtInfo = (PrintTxtInfo) info;
+
+            if (null == txtInfo.txt) {
+                // 过滤文本为空
+                return;
+            }
+
+            printTxt(txtInfo);
             return;
         }
 

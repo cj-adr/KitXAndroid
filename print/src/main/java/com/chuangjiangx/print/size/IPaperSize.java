@@ -10,6 +10,6 @@ public abstract class IPaperSize {
     public int MAX_LEFT_SIZE = 0; // 左侧最大字节数
     public int MAX_CENTER_SIZE = 0; // 中间最大字节数
     public int MAX_RIGHT_SIZE = 0; // 右侧最大字节数
-    public int MAX_TITLE_BIG = 0;
+    public int MAX_TITLE_BIG = 0; // 用于由于字体宽度放大导致单个字符宽度计算问题
 
 }

@@ -13,6 +13,7 @@ import com.chuangjiangx.print.PrintLogUtils;
 import com.chuangjiangx.print.PrintSupport;
 import com.chuangjiangx.print.impl.bluetooth.BluetoothPrinter;
 import com.chuangjiangx.print.impl.sunmisc.SmPrinter;
+import com.chuangjiangx.print.size.Print58Size;
 import com.chuangjiangx.print.size.Print80Size;
 
 /**
@@ -24,10 +25,10 @@ public class SMPrintFragment extends BasePrintFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PrintSupport.getInstance().init(mContext, new SmPrinter(), new Print80Size());
+        PrintSupport.getInstance().init(mContext, new SmPrinter(), new Print58Size());
 
         // 使用内置虚拟蓝牙打印(经测试无法打印，官方demo也无法打印)
-//        PrintSupport.getInstance().init(mContext, new BluetoothPrinter("00:11:22:33:44:55", getBluetoothConnectListener()), new Print80Size());
+//        PrintSupport.getInstance().init(mContext, new BluetoothPrinter("00:11:22:33:44:55", getBluetoothConnectListener()), new Print58Size());
     }
 
     @Nullable

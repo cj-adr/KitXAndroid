@@ -78,14 +78,17 @@ public final class PrintSupport {
      */
     public void print(List<IPrintInfo> list) {
         if (null == list || list.isEmpty()) {
+            PrintLogUtils.d("打印内容为空！");
             return;
         }
 
         if (null == mPrintable) {
+            PrintLogUtils.d("mPrintable为空！");
             return;
         }
 
         if (!checkPrintable()) {
+            PrintLogUtils.d("Printable不可用！");
             // 不可用
             if (!mPrintable.canReconnect()) {
                 return;

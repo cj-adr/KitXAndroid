@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Bitmap;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -158,26 +157,11 @@ final class SmPrinterUtils extends BaseEscPrintUtils {
             PrintLogUtils.e(e, "");
         }
 
-        return printerState == 1;
-    }
-
-    /**
-     * 是否还有打印纸
-     */
-    private boolean hasPaper() {
-        int printerState = 0;
-        try {
-            printerState = woyouService.updatePrinterState();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return printerState != 4;
+        return printerState == 1 || printerState == 0;
     }
 
     boolean isAvailable() {
-        return isConnect() && hasPaper();
+        return isConnect();
     }
 
     @Override
@@ -215,35 +199,18 @@ final class SmPrinterUtils extends BaseEscPrintUtils {
     @Override
     public void printText(String content, boolean isCenter, boolean isLargeSize, boolean isBold, boolean isUnderLine) {
         try {
-            if (isCenter) {
-                woyouService.setAlignment(1, null);
-
-            } else {
-                woyouService.setAlignment(0, null);
-            }
-
+            woyouService.setAlignment(isCenter ? 1 : 0, null);
             woyouService.sendRAWData(ESCPOSUtil.setFontBold(isBold), null);
             woyouService.sendRAWData(ESCPOSUtil.setUnderline(isUnderLine ? 1 : 0), null);
 
-            woyouService.printTextWithFont(content, null, isLargeSize ? 40 : 28, null);
+            woyouService.sendRAWData(ESCPOSUtil.setFontSize(1, isLargeSize ? 2 : 1), null);
+            woyouService.printText(content, null);
 
             printWrapLine(1);
 
             woyouService.setAlignment(0, null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void printBitmap(Bitmap bitmap, int position) {
-        try {
-            woyouService.setAlignment(position, null);
-            woyouService.printBitmap(bitmap, null);
-
-            printWrapLine(1);
-            woyouService.setAlignment(0, null);
+            woyouService.sendRAWData(ESCPOSUtil.setFontBold(false), null);
+            woyouService.sendRAWData(ESCPOSUtil.setFontSize(1, 1), null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -254,34 +221,6 @@ final class SmPrinterUtils extends BaseEscPrintUtils {
     public void printWrapLine(int count) {
         try {
             woyouService.lineWrap(count, null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void printBarCode(String data, int width, int height) {
-        try {
-            woyouService.setAlignment(1, null);
-            woyouService.printBarCode(data, 8, height, width, 0, null);
-
-            printWrapLine(1);
-            woyouService.setAlignment(0, null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void printQrCode(String qrCode, int moduleSize) {
-        try {
-            woyouService.setAlignment(1, null);
-            woyouService.printQRCode(qrCode, moduleSize, 3, null);
-
-            printWrapLine(1);
-            woyouService.setAlignment(0, null);
 
         } catch (Exception e) {
             e.printStackTrace();
