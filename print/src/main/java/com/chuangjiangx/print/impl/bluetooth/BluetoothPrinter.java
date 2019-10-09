@@ -35,12 +35,17 @@ public class BluetoothPrinter extends AbstractPrintable {
 
     @Override
     public void reconnect() {
+        if (null == address) {
+            return;
+        }
+
         BluetoothPrinterUtils.getInstance().connectDevice(address);
     }
 
     @Override
     public void close() {
         BluetoothPrinterUtils.getInstance().close();
+        this.address = null;
     }
 
     @Override
@@ -50,7 +55,8 @@ public class BluetoothPrinter extends AbstractPrintable {
 
     @Override
     public boolean canReconnect() {
-        return true;
+        // 蓝牙地址不为空时才允许重连
+        return null != address;
     }
 
     @Override
