@@ -1,23 +1,20 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 apply from: '../dependencies.gradle'
 
 android {
     compileSdkVersion versions.compileSdkVersion
+
     defaultConfig {
-        applicationId "com.chuangjiangx.kitxandroid"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
         versionCode versions.versionCode
         versionName versions.versionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        multiDexEnabled true
 
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,23 +26,15 @@ android {
         sourceCompatibility = versions.jdkVersion
         targetCompatibility = versions.jdkVersion
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'androidx.multidex:multidex:2.0.1'
-
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation project(path: ':print')
-    api project(path: ':core')
-
-    // view导航框架
-    implementation project(path: ':viewnavi')
-    // 注解处理框架
     implementation project(path: ':viewnavicompiler')
-    kapt project(path: ':viewnavicompiler')
 }

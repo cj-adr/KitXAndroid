@@ -1,1 +1,1 @@
-include ':app', ':core', ':print'
+include ':app', ':core', ':print', ':viewnavi', ':viewnavicompiler'
