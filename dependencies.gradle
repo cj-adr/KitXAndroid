@@ -4,6 +4,6 @@ ext.versions = [
         minSdkVersion    : 16,
         targetSdkVersion : 28,
         jdkVersion       : '1.8',
-        versionCode      : 18,
-        versionName      : '1.2.0'
+        versionCode      : 21,
+        versionName      : '1.2.3'
 ]

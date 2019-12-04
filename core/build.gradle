@@ -59,8 +59,8 @@ dependencies {
     api files('libs/com.baidu.tts_2.3.0.jar')
     api "androidx.core:core-ktx:+"
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
+    api('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1') { transitive = true }
+    api('org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1') { transitive = true }
 }
 repositories {
     mavenCentral()

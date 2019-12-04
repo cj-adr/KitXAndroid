@@ -9,6 +9,8 @@ import com.chuangjiangx.core.KitX;
 import com.chuangjiangx.core.speak.SpeakManager;
 import com.facebook.stetho.Stetho;
 
+import okhttp3.OkHttpClient;
+
 public class MyApplication extends Application {
 
     @Override
