@@ -2,6 +2,8 @@ package com.chuangjiangx.core;
 
 import android.content.Context;
 
+import com.chuangjiangx.core.speak.SpeakManager;
+
 public class KitX {
 
     public static Context mContext;

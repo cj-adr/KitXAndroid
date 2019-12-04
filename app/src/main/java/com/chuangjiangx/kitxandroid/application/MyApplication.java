@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.multidex.MultiDex;
 
 import com.chuangjiangx.core.KitX;
+import com.chuangjiangx.core.speak.SpeakManager;
 import com.facebook.stetho.Stetho;
 
 public class MyApplication extends Application {
@@ -15,6 +16,9 @@ public class MyApplication extends Application {
         super.onCreate();
         KitX.init(this);
         Stetho.initializeWithDefaults(this);
+
+        SpeakManager.INSTANCE.init("17927943", "4WZmsPVtQd9ObfZUuCEtrMGZ"
+                , "6rm0zsbbfSM2OumDlWH7A8tqpNGQ00xO");
     }
 
     @Override

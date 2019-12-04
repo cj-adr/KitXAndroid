@@ -6,6 +6,7 @@ import android.view.View;
 import com.chuangjiangx.kitxandroid.IndexActivity;
 import com.chuangjiangx.kitxandroid.network.index.NetworkActivity;
 import com.chuangjiangx.kitxandroid.print.PrintTestActivity;
+import com.chuangjiangx.kitxandroid.speak.SpeakActivity;
 import com.chuangjiangx.kitxandroid.viewnavi.NaviActivity;
 
 import java.util.Arrays;
@@ -16,7 +17,7 @@ public class MainActivity extends IndexActivity {
 
     @Override
     public List<String> getItems() {
-        return Arrays.asList("网络请求", "UI组建", "打印", "ViewNavi");
+        return Arrays.asList("网络请求", "UI组建", "打印", "ViewNavi", "语音播报");
     }
 
     @Override
@@ -35,6 +36,10 @@ public class MainActivity extends IndexActivity {
 
             case 3:
                 startActivity(new Intent(MainActivity.this, NaviActivity.class));
+                break;
+
+            case 4:
+                startActivity(new Intent(MainActivity.this, SpeakActivity.class));
                 break;
         }
     }
