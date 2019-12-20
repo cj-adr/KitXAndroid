@@ -33,7 +33,7 @@ public abstract class BaseEscPrintUtils {
         printText(" ", false, false, false, false);
         printText(" ", false, false, false, false);
 //        write(ESCPOSUtil.cut());
-        write(ESCPOSUtil.init());
+//        write(ESCPOSUtil.init());
     }
 
     /**
