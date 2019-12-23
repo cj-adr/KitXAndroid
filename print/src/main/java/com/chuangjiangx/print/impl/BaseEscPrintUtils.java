@@ -29,10 +29,7 @@ public abstract class BaseEscPrintUtils {
      * 切纸
      */
     public void cutPaper() {
-//        printWrapLine(5);
-        printText(" ", false, false, false, false);
-        printText(" ", false, false, false, false);
-        printText(" ", false, false, false, false);
+        printWrapLine(5);
         write(ESCPOSUtil.cut());
         write(ESCPOSUtil.init());
     }
